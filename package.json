@@ -1,0 +1,19 @@
+{
+  "name": "audiobooks-converter",
+  "version": "0.1.0",
+  "description": "Converts books for iOS",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "compile": "turbo run compile",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "keywords": [],
+  "author": "Denis Moiseev",
+  "license": "ISC",
+  "devDependencies": {
+    "prettier": "2.7.1",
+    "turbo": "1.3.1"
+  }
+}

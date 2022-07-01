@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "esnext",
+    "sourceMap": false,
+    "moduleResolution": "Node",
+    "skipLibCheck": true,
+    "strict": true,
+    "isolatedModules": true,
+    "removeComments": true,
+    "resolveJsonModule": true,
+
+    "baseUrl": "./",
+    "rootDirs": ["./src"],
+    "allowJs": true,
+    "paths": {
+      "*": ["./src/*"]
+    },
+
+    "outDir": "dist/main"
+  },
+  "include": ["src/**/*.ts", "types/**/*.d.ts"],
+  "exclude": ["**/*.spec.ts", "**/*.test.ts", "node_modules"]
+}

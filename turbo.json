@@ -1,0 +1,23 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "baseBranch": "origin/master",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "audiobook-converter#build": {
+      "cache": false
+    },
+    "compile": {
+      "dependsOn": ["build", "^compile"],
+      "outputs": ["dist/**"]
+    },
+    "lint": {
+      "outputs": []
+    },
+    "dev": {
+      "cache": false
+    }
+  }
+}
