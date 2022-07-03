@@ -1,4 +1,8 @@
-import { app } from 'electron'
+import { archConfig } from './config'
+import { app, BrowserWindow, dialog, ipcMain, OpenDialogOptions, protocol } from 'electron'
+import promiseIpc from 'electron-promise-ipc/build/mainProcess'
+import { parseDirectory } from './ffprobe-parser'
+import { convert } from './ffmpeg-converter'
 import { restoreOrCreateWindow } from './mainWindow'
 
 /**
@@ -51,3 +55,107 @@ if (import.meta.env.DEV) {
     )
     .catch(e => console.error('Failed install extension:', e))
 }
+
+app.whenReady().then(() => {
+  protocol.registerFileProtocol('atom', (request, callback) => {
+    console.log(request.url)
+    const url = request.url.slice(7)
+    callback({ path: decodeURI(url) })
+  })
+})
+
+promiseIpc.on('dialog/open', async (options: any) => {
+  const { canceled, filePaths } = await dialog.showOpenDialog(options)
+
+  if (canceled || !filePaths.length) {
+    throw 'Not selected'
+  }
+
+  return filePaths
+})
+
+promiseIpc.on('parser/parse', async (path: string): Promise<any> => {
+  return parseDirectory(path)
+})
+
+// ipcMain.on('open-file-dialog-dataset', event => {
+//   dialog
+//     .showOpenDialog({
+//       properties: ['openDirectory', 'multiSelections', 'openFile'],
+//       defaultPath: archConfig.sourceBooksPath,
+//     })
+//     .then(async result => {
+//       let parsed = 0
+//       const total = result.filePaths.length
+//       event.sender.send('parser-progress', { parsed, total })
+
+//       for (const filePath of result.filePaths) {
+//         const book = await parseDirectory(filePath)
+
+//         event.sender.send('book-parsed', book)
+//         event.sender.send('parser-progress', { parsed: parsed++, total })
+//       }
+
+//       event.sender.send('parser-progress', { parsed, total })
+//     })
+//     .catch(err => {
+//       console.log(err)
+//     })
+// })
+
+promiseIpc.on('encoder/encode', async (book: any) => {
+  const { canceled, filePaths } = await dialog.showOpenDialog({
+    properties: ['openDirectory', 'createDirectory'],
+    defaultPath: archConfig.saveDirectoryPath,
+    buttonLabel: 'Save',
+  })
+
+  console.log(book)
+
+  let window = BrowserWindow.getAllWindows().find(w => !w.isDestroyed())
+
+  if (!canceled && filePaths.length) {
+    convert(book, filePaths[0], progress => {
+      console.log('progress', progress)
+      window?.webContents.send('encoder/progress', { bookId: book.id, progress })
+      // promiseIpc.send('encoder/progress', { bookId: book.id, progress })
+    })
+  }
+})
+
+// ipcMain.on('convert-book', async ({ sender }, book) => {
+//   console.log('start conver book', book)
+
+//   try {
+//     const { canceled, filePaths } = await dialog.showOpenDialog({
+//       properties: ['openDirectory', 'createDirectory'],
+//       defaultPath: archConfig.saveDirectoryPath,
+//       buttonLabel: 'Save',
+//     })
+
+//     if (!canceled && filePaths.length) {
+//       convert(book, filePaths[0], progress => {
+//         sender.send('convert-progress', { bookId: book.id, progress })
+//       })
+//     }
+//   } catch (err) {
+//     console.log(err)
+//   }
+// })
+
+// ipcMain.on('cover-select', async ({ sender }) => {
+//   try {
+//     const { canceled, filePaths } = await dialog.showOpenDialog({
+//       properties: ['openFile'],
+//       defaultPath: archConfig.coversPath,
+//       buttonLabel: 'Select',
+//       filters: [{ name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif'] }],
+//     })
+
+//     if (!canceled && filePaths.length) {
+//       sender.send('cover-selected', filePaths[0])
+//     }
+//   } catch (err) {
+//     console.log(err)
+//   }
+// })

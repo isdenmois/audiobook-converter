@@ -3,16 +3,24 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "3.2.37"
+    "@nanostores/vue": "^0.5.5",
+    "@xstate/vue": "^2.0.0",
+    "electron-promise-ipc": "^2.2.4",
+    "nanostores": "^0.5.12",
+    "vue": "3.2.37",
+    "xstate": "^4.32.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "2.3.3",
+    "electron": "19.0.7",
+    "types": "workspace:*",
     "typescript": "4.7.4",
     "vite": "2.9.13",
+    "vite-plugin-resolve": "^2.1.2",
     "vue-tsc": "0.38.2"
   }
 }

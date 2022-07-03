@@ -9,6 +9,7 @@
     "isolatedModules": true,
     "removeComments": true,
     "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
 
     "baseUrl": "./",
     "rootDirs": ["./src"],

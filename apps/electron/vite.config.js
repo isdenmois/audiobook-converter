@@ -1,5 +1,6 @@
-import { node } from './.electron-vendors.cache.json'
 import { builtinModules } from 'module'
+import { replaceCodePlugin } from 'vite-plugin-replace'
+import { node } from './.electron-vendors.cache.json'
 
 const PACKAGE_ROOT = __dirname
 
@@ -11,6 +12,16 @@ const config = {
   mode: process.env.MODE,
   root: PACKAGE_ROOT,
   envDir: process.cwd(),
+  plugins: [
+    replaceCodePlugin({
+      replacements: [
+        {
+          from: 'process.env.FLUENTFFMPEG_COV',
+          to: 'false',
+        },
+      ],
+    }),
+  ],
   build: {
     sourcemap: process.env.MODE === 'development',
     target: `node${node}`,
