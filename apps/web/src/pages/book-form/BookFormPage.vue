@@ -108,7 +108,7 @@ onMounted(() => {
 
   <Card class="footer mt-3">
     <button class="secondary" @click="emit('skip')">Skip</button>
-    <button class="ml-3" @click="save">Save</button>
+    <button class="ml-3" @click="save">Add</button>
   </Card>
 </template>
 
