@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { unref, ref, toRaw, computed } from 'vue'
-import { Dropdown, DropdownItem } from 'shared/ui'
+import { Card, Dropdown, DropdownItem } from 'shared/ui'
 import { formatDuration } from 'shared/lib'
 import { currentIcon, currentAndBelowIcon } from 'shared/assets'
 import { api } from 'shared/api'
@@ -46,47 +46,65 @@ const selectCover = async () => {
 }
 </script>
 <template>
-  <div @click="selectCover">
-    <img v-if="image" :src="`atom://${image}`" :alt="title" class="cover" />
-    <div v-else class="cover cover_empty" />
-  </div>
+  <Card class="flex fd-row">
+    <div @click="selectCover">
+      <img v-if="image" :src="`atom://${image}`" :alt="title" class="cover" />
+      <div v-else class="cover cover_empty" />
+    </div>
 
-  <p>
-    <input type="text" v-model="title" />
-    <Dropdown :image-src="currentIcon">
-      <DropdownItem v-for="tag of tags" @click="title = tag">{{ tag }}</DropdownItem>
-    </Dropdown>
-  </p>
-  <p>
-    <input type="text" v-model="author" />
-    <Dropdown :image-src="currentAndBelowIcon">
-      <DropdownItem v-for="tag of tags" @click="author = tag">{{ tag }}</DropdownItem>
-    </Dropdown>
-  </p>
+    <div class="flex-1 ml-3">
+      <p class="flex fd-row gap-3">
+        <input class="flex-1" type="text" v-model="title" />
+        <Dropdown :image-src="currentIcon">
+          <DropdownItem v-for="tag of tags" @click="title = tag">{{ tag }}</DropdownItem>
+        </Dropdown>
+      </p>
 
-  <p>
-    <input type="range" min="0.1" max="2.0" step="0.1" :value="speed" @input="speed = +$event.target.value" />
-    <span>{{ speed }}x, {{ duration }} </span>
-  </p>
+      <p class="flex fd-row gap-3">
+        <input class="flex-1" type="text" v-model="author" />
+        <Dropdown :image-src="currentIcon">
+          <DropdownItem v-for="tag of tags" @click="author = tag">{{ tag }}</DropdownItem>
+        </Dropdown>
+      </p>
 
-  <ol>
-    <li v-for="(chapter, index) in chapters">
-      <input v-model="chapter.title" />
+      <p class="flex fd-row gap-3">
+        <input
+          class="flex-1"
+          type="range"
+          min="0.1"
+          max="2.0"
+          step="0.1"
+          :value="speed"
+          @input="speed = +$event.target.value"
+        />
+        <span>{{ speed }}x, {{ duration }} </span>
+      </p>
+    </div>
+  </Card>
 
-      <Dropdown :image-src="currentIcon">
-        <DropdownItem v-for="tag of Object.values(chapter.tags)" @click="chapter.title = tag">{{ tag }}</DropdownItem>
-      </Dropdown>
+  <Card class="main flex flex-1 mt-3">
+    <ol class="scroll">
+      <li class="flex fd-row gap-3 mt-2" v-for="(chapter, index) in chapters">
+        <div>{{ String(index + 1).padStart(3, '0') }}</div>
+        <input class="flex-1" v-model="chapter.title" />
 
-      <Dropdown :image-src="currentAndBelowIcon">
-        <DropdownItem v-for="tag of Object.keys(chapter.tags)" @click="setChaptersTags(index, tag)">{{
-          chapter.tags[tag]
-        }}</DropdownItem>
-      </Dropdown>
-    </li>
-  </ol>
+        <Dropdown :image-src="currentIcon">
+          <DropdownItem v-for="tag of Object.values(chapter.tags)" @click="chapter.title = tag">{{ tag }}</DropdownItem>
+        </Dropdown>
 
-  <button @click="save">Save</button>
-  <button @click="emit('skip')">Skip</button>
+        <Dropdown :image-src="currentAndBelowIcon">
+          <DropdownItem v-for="tag of Object.keys(chapter.tags)" @click="setChaptersTags(index, tag)">{{
+            chapter.tags[tag]
+          }}</DropdownItem>
+        </Dropdown>
+      </li>
+    </ol>
+  </Card>
+
+  <Card class="footer mt-3">
+    <button class="secondary" @click="emit('skip')">Skip</button>
+    <button class="ml-3" @click="save">Save</button>
+  </Card>
 </template>
 
 <style scoped>
@@ -101,5 +119,21 @@ const selectCover = async () => {
 
 .cover_empty {
   background-color: gray;
+}
+
+.main {
+  overflow: hidden;
+}
+
+.scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+  margin: 0;
+  padding-right: 8px;
+}
+
+.footer {
+  text-align: right;
 }
 </style>

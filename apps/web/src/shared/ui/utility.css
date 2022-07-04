@@ -3,6 +3,14 @@
   flex-direction: column;
 }
 
+.fd-row {
+  flex-direction: row;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
 .text-m {
   font-size: 20px;
 }
@@ -29,4 +37,16 @@
 
 .mt-4 {
   margin-top: 32px;
+}
+
+.ml-3 {
+  margin-left: 24px;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.gap-3 {
+  gap: 24px;
 }
