@@ -1,0 +1,32 @@
+.flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.text-m {
+  font-size: 20px;
+}
+
+.text-s {
+  font-size: 16px;
+}
+
+.secondary {
+  color: var(--secondary-text);
+}
+
+.mt-1 {
+  margin-top: 8px;
+}
+
+.mt-2 {
+  margin-top: 16px;
+}
+
+.mt-3 {
+  margin-top: 24px;
+}
+
+.mt-4 {
+  margin-top: 32px;
+}

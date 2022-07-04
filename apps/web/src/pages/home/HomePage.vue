@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { addToParse } from 'entities/media-parser'
 import { api } from 'shared/api'
+import { emptyBackground } from 'shared/assets'
+import { Card } from 'shared/ui'
 
 const addBooks = async () => {
   try {
@@ -12,7 +14,31 @@ const addBooks = async () => {
 </script>
 
 <template>
-  <h3>Start by adding the first audiobook</h3>
-  <h4>Add an audiobook file or folder to begin the process of encoding</h4>
-  <button @click="addBooks">Add audiobook</button>
+  <div class="home-page flex">
+    <Card class="home-empty flex">
+      <img class="empty-img" :src="emptyBackground" />
+      <div class="text-m mt-4">Start by adding the first audiobook</div>
+      <div class="text-s secondary mt-2">Add an audiobook file or folder to begin the process of encoding</div>
+      <button class="mt-4" @click="addBooks">Add audiobook</button>
+    </Card>
+  </div>
 </template>
+
+<style>
+.home-page {
+  flex: 1;
+  padding: 24px;
+  justify-content: stretch;
+}
+
+.empty-img {
+  height: 337px;
+  width: 436px;
+}
+
+.home-empty {
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+</style>

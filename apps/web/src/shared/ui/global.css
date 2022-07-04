@@ -1,0 +1,55 @@
+:root {
+  --background: #f3f5f7;
+  --card-background: #fff;
+  --primary: #0084ff;
+  --button-secondary: #e0e5eb;
+
+  --primary-text: #162b4a;
+  --secondary-text: #8a95a9;
+  --button-text: #fff;
+}
+
+@font-face {
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: bold;
+  src: local('Helvetica-Bold'), url(../assets/helvetica_bold.otf) format('opentype');
+}
+@font-face {
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: lighter;
+  src: local('Helvetica-Light'), url(../assets/helvetica_light.otf) format('opentype');
+}
+@font-face {
+  font-family: Helvetica;
+  font-style: normal;
+  font-weight: 500;
+  src: local('Helvetica'), url(../assets/helvetica.otf) format('opentype');
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: 500;
+  background-color: var(--background);
+  color: var(--primary-text);
+}
+
+#app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+}
