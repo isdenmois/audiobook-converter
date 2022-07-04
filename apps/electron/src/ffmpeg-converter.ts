@@ -151,7 +151,7 @@ const prepareMetaFile = async (audiobook: any, metaFile: string) => {
     'compatible_brands=isomiso2',
     `title=${audiobook.title}`,
     `artist=${audiobook.author}`,
-    `album=${audiobook.series || audiobook.author}`,
+    `album=${audiobook.series || audiobook.title}`,
     //            if (StringUtils.isNotBlank(bookInfo.series().get())) {
     //                metaData.add("album=" + bookInfo.series())
     //            } else {
