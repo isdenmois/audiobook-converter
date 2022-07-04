@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { unref, ref, toRaw, computed } from 'vue'
+import { unref, ref, toRaw, computed, onMounted } from 'vue'
 import { Card, Dropdown, DropdownItem } from 'shared/ui'
 import { formatDuration } from 'shared/lib'
 import { currentIcon, currentAndBelowIcon } from 'shared/assets'
@@ -7,6 +7,7 @@ import { api } from 'shared/api'
 
 const props = defineProps(['book'])
 const emit = defineEmits(['save', 'skip'])
+const scrollRef = ref<HTMLElement | null>(null)
 
 let image = ref(props.book.image)
 let title = ref(props.book.title)
@@ -44,6 +45,10 @@ const selectCover = async () => {
     image.value = imagePath
   } catch {}
 }
+
+onMounted(() => {
+  scrollRef.value!.scrollTop = 1
+})
 </script>
 <template>
   <Card class="flex fd-row">
@@ -83,8 +88,8 @@ const selectCover = async () => {
   </Card>
 
   <Card class="main flex flex-1 mt-3">
-    <ol class="scroll">
-      <li class="flex fd-row gap-3 mt-2" v-for="(chapter, index) in chapters">
+    <ol class="scroll" ref="scrollRef">
+      <li class="flex fd-row gap-3 mt-2" v-for="(chapter, index) in chapters" :key="chapter.path">
         <div>{{ String(index + 1).padStart(3, '0') }}</div>
         <input class="flex-1" v-model="chapter.title" />
 
