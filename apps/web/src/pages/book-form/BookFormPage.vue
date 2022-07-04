@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { unref, ref, toRaw, computed, onUnmounted } from 'vue'
+import { unref, ref, toRaw, computed } from 'vue'
 import { Dropdown, DropdownItem } from 'shared/ui'
 import { formatDuration } from 'shared/lib'
 import { currentIcon, currentAndBelowIcon } from 'shared/assets'
-import { ipcRenderer } from 'electron'
+import { api } from 'shared/api'
 
 const props = defineProps(['book'])
 const emit = defineEmits(['save', 'skip'])
@@ -37,17 +37,13 @@ const save = () => {
   })
 }
 
-const selectCover = () => ipcRenderer.send('cover-select')
+const selectCover = async () => {
+  try {
+    const [imagePath] = await api.dialog.openCover()
 
-const onCoverSelected = (_: any, imagePath: string) => {
-  image.value = imagePath
+    image.value = imagePath
+  } catch {}
 }
-
-ipcRenderer.on('cover-selected', onCoverSelected)
-
-onUnmounted(() => {
-  ipcRenderer.off('cover-selected', onCoverSelected)
-})
 </script>
 <template>
   <div @click="selectCover">
