@@ -1,20 +1,61 @@
 <script setup lang="ts">
-import { computed, StyleValue } from 'vue'
+import { computed, ref, StyleValue, VNodeRef } from 'vue'
 
 const props = defineProps<{
   size?: number
   imageSrc: string
 }>()
 const size = computed(() => ({ width: props.size || 24, height: props.size || 24 } as StyleValue))
+
+const opened = ref(false)
+const buttonRef = ref<HTMLElement>()
+const position = ref({ left: '0px', top: '0px' })
+
+const open = () => {
+  const { left, bottom } = buttonRef.value?.getBoundingClientRect() || { left: 0, bottom: 0 }
+
+  position.value = {
+    left: `${left}px`,
+    top: `${bottom}px`,
+  }
+
+  if (!opened.value) {
+    opened.value = true
+
+    setTimeout(() => {
+      document.body.addEventListener('click', function close() {
+        opened.value = false
+        document.body.removeEventListener('click', close)
+      })
+    })
+  }
+}
+
+const dropdownShown = (ref: any | null) => {
+  if (ref) {
+    const { left, width, top, height } = ref.getBoundingClientRect()
+    const { innerWidth, innerHeight } = window
+    const [maxWidth, maxHeight] = [innerWidth - width - 12, innerHeight - height - 12]
+
+    if (left > maxWidth || top > maxHeight) {
+      position.value = {
+        left: Math.min(left, maxWidth) + 'px',
+        top: Math.min(top, maxHeight) + 'px',
+      }
+    }
+  }
+}
 </script>
 
 <template>
   <div class="dropdown">
-    <img class="dropbtn" :src="props.imageSrc" :style="size" />
+    <img class="dropbtn" :src="props.imageSrc" :style="size" @click="open" ref="buttonRef" />
 
-    <div class="dropdown-content">
-      <slot></slot>
-    </div>
+    <teleport v-if="opened" to="#modals">
+      <div class="dropdown-content" :style="position" :ref="dropdownShown">
+        <slot></slot>
+      </div>
+    </teleport>
   </div>
 </template>
 
@@ -30,17 +71,11 @@ const size = computed(() => ({ width: props.size || 24, height: props.size || 24
 }
 
 .dropdown-content {
-  display: none;
-  position: absolute;
-  right: 0;
+  position: fixed;
   background-color: #f1f1f1;
-  min-width: 200px;
+  width: 200px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
 }
 
 .dropdown:hover .dropbtn {
