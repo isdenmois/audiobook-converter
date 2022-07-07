@@ -180,7 +180,7 @@ const prepareMetaFile = async (audiobook: any, metaFile: string) => {
   await fs.writeFile(metaFile, meta.join('\n'), { encoding: 'utf-8' })
 }
 
-const ffmpegExe = process.arch === 'win32' ? 'ffmpeg.exe' : 'ffmpeg'
+const ffmpegExe = process.platform === 'win32' ? 'ffmpeg.exe' : 'ffmpeg'
 
 const concatFiles = (files: string[], metaFile: string, image: string | null, output: string) =>
   new Promise((resolve, reject) => {

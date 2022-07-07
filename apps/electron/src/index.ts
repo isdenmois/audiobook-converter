@@ -1,4 +1,3 @@
-import { archConfig } from './config'
 import { app, BrowserWindow, dialog, ipcMain, OpenDialogOptions, protocol } from 'electron'
 import promiseIpc from 'electron-promise-ipc/build/mainProcess'
 import { parseDirectory } from './ffprobe-parser'
@@ -103,14 +102,12 @@ promiseIpc.on('parser/parse', async (path: string): Promise<any> => {
 //     })
 // })
 
-promiseIpc.on('encoder/encode', async (book: any) => {
+promiseIpc.on('encoder/encode', async (book: any, defaultPath: string) => {
   const { canceled, filePaths } = await dialog.showOpenDialog({
     properties: ['openDirectory', 'createDirectory'],
-    defaultPath: archConfig.saveDirectoryPath,
+    defaultPath,
     buttonLabel: 'Save',
   })
-
-  console.log(book)
 
   let window = BrowserWindow.getAllWindows().find(w => !w.isDestroyed())
 

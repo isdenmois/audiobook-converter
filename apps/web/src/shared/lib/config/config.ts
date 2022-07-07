@@ -1,5 +1,5 @@
 export const config =
-  process.arch === 'win32'
+  process.platform === 'win32'
     ? {
         sourceBooksPath: 'E:\\Audiobooks',
         saveDirectoryPath: 'D:\\Audiobooks_Encoded',
