@@ -1,0 +1,10 @@
+{
+    "configurations": [
+      {
+        "type": "command",
+        "name": "dev",
+        "program": "pnpm.cmd",
+        "args": ["dev"]
+      }
+    ]
+}
