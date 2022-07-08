@@ -1,1 +1,6 @@
-export { default as promiseIpc } from 'electron-promise-ipc/build/renderer'
+import promiseIpc from 'electron-promise-ipc/build/renderer'
+
+// @ts-ignore
+delete promiseIpc.maxTimeoutMs
+
+export { promiseIpc }

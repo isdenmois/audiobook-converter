@@ -2,23 +2,31 @@
 import { useStore } from '@nanostores/vue'
 import { ipcRenderer } from 'electron'
 import { $books } from 'entities/audiobook'
-import { ref } from 'vue'
+import {computed, ref} from 'vue'
+import { Card } from 'shared/ui'
 import { formatDuration } from 'shared/lib'
 import { addToParse } from 'entities/media-parser'
 import { api } from 'shared/api'
 
 const books = useStore($books)
+const currentBook = ref<any>(null)
 
 const progress = ref(-1)
 
-const startEncode = async () => {
-  for (const book of $books.get()) {
-    await api.encoder.encode(JSON.parse(JSON.stringify(book)))
-  }
-  // const book = JSON.parse(JSON.stringify($books.get()[0]))
+const disabled = computed(() => progress.value >= 0)
 
-  // api.encoder.encode(book)
-  // ipcRenderer.send('convert-book', book)
+const startEncode = async () => {
+  const path = await api.dialog.selectSaveDirectory()
+
+  for (const book of $books.get()) {
+    currentBook.value = book
+
+    try {
+      await api.encoder.encode(JSON.parse(JSON.stringify(book)), path)
+    } catch (e) {
+      console.error(e)
+    }
+  }
 }
 
 const addBooks = async () => {
@@ -35,21 +43,33 @@ ipcRenderer.on('encoder/progress', (_, { bookId, progress: percent }) => {
 </script>
 
 <template>
-  <ul>
-    <li v-for="book of books">
-      <img v-if="book.image" :src="`atom://${book.image}`" :alt="book.title" class="cover" />
-      <span v-else class="cover cover_empty" />
-      {{ book.title }}, {{ formatDuration(book.duration / book.speed) }} ({{ book.speed }}x)
-    </li>
-  </ul>
+  <div class="flex flex-1 flex-col">
+    <Card class="flex-1">
+      <ul>
+        <li v-for="book of books" :key="book.id">
+          <img v-if="book.image" :src="`atom://${book.image}`" :alt="book.title" class="cover" />
+          <span v-else class="cover cover_empty" />
+          {{ book.title }}, {{ formatDuration(book.duration / book.speed) }} ({{ book.speed }}x)
+        </li>
+      </ul>
+    </Card>
 
-  <button @click="startEncode" :disabled="progress >= 0">Encode</button>
-  <button @click="addBooks" :disabled="progress >= 0">Add audiobook</button>
+    <Card class="mt-4">
+      <div v-if="!disabled" class="flex flex-row gap-3">
+        <button @click="startEncode" :disabled="progress >= 0">Encode</button>
+        <button @click="addBooks" :disabled="progress >= 0">Add audiobook</button>
+      </div>
 
-  <p v-if="progress >= 0">
-    <progress max="100" :value="progress" />
-    {{ Math.round(progress) }}%
-  </p>
+      <div v-if="disabled && currentBook">
+        Current book: {{currentBook.title}}
+      </div>
+
+      <p v-if="disabled">
+        <progress max="100" :value="progress" />
+        {{ Math.round(progress) }}%
+      </p>
+    </Card>
+  </div>
 </template>
 
 <style scoped>

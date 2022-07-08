@@ -102,22 +102,13 @@ promiseIpc.on('parser/parse', async (path: string): Promise<any> => {
 //     })
 // })
 
-promiseIpc.on('encoder/encode', async (book: any, defaultPath: string) => {
-  const { canceled, filePaths } = await dialog.showOpenDialog({
-    properties: ['openDirectory', 'createDirectory'],
-    defaultPath,
-    buttonLabel: 'Save',
-  })
-
+promiseIpc.on('encoder/encode', async (book: any, path: string) => {
   let window = BrowserWindow.getAllWindows().find(w => !w.isDestroyed())
 
-  if (!canceled && filePaths.length) {
-    convert(book, filePaths[0], progress => {
-      console.log('progress', progress)
-      window?.webContents.send('encoder/progress', { bookId: book.id, progress })
-      // promiseIpc.send('encoder/progress', { bookId: book.id, progress })
-    })
-  }
+  await convert(book, path, progress => {
+    window?.webContents.send('encoder/progress', { bookId: book.id, progress })
+    // promiseIpc.send('encoder/progress', { bookId: book.id, progress })
+  })
 })
 
 // ipcMain.on('convert-book', async ({ sender }, book) => {

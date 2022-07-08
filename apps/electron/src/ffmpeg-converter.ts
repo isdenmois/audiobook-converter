@@ -135,7 +135,6 @@ const convertToAac = (file: string, speed: number, output: string, onProgress) =
 
     command
       .on('progress', ({ percent }) => {
-        console.log('progress ' + percent + '%')
         onProgress(percent)
       })
       .on('end', resolve)
