@@ -9,8 +9,8 @@ async function createWindow() {
       webviewTag: false, // The webview tag is not recommended. Consider alternatives like iframe or Electron's BrowserView. https://www.electronjs.org/docs/latest/api/webview-tag#warning
     },
     autoHideMenuBar: true,
-    width: import.meta.env.DEV ? 1600 : 1024,
-    height: 768,
+    width: import.meta.env.DEV ? 1600 : 1000,
+    height: 1000,
   })
 
   /**

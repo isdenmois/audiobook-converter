@@ -2,12 +2,19 @@ import { defineConfig } from 'vite'
 import { resolve } from 'path'
 import vue from '@vitejs/plugin-vue'
 import viteResolve from 'vite-plugin-resolve'
+import Unocss from 'unocss/vite'
+import { presetUno } from 'unocss'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '',
   plugins: [
     vue(),
+    Unocss({
+      presets: [
+        presetUno(),
+      ],
+    }),
     viteResolve({
       // Electron
       electron: `

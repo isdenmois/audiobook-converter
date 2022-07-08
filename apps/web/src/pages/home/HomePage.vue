@@ -14,8 +14,8 @@ const addBooks = async () => {
 </script>
 
 <template>
-  <div class="home-page flex">
-    <Card class="home-empty flex">
+  <div class="home-page flex flex-col">
+    <Card class="home-empty flex flex-col">
       <img class="empty-img" :src="emptyBackground" />
       <div class="text-m mt-4">Start by adding the first audiobook</div>
       <div class="text-s secondary mt-2">Add an audiobook file or folder to begin the process of encoding</div>

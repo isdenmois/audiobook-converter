@@ -34,6 +34,7 @@
 
 html {
   padding: 0;
+  font-size: 32px;
 }
 
 body {
@@ -53,4 +54,23 @@ body {
   display: flex;
   flex-direction: column;
   padding: 24px;
+}
+
+.text-m {
+  font-size: 20px;
+}
+
+.text-s {
+  font-size: 16px;
+}
+
+.secondary {
+  color: var(--secondary-text);
+}
+
+.scroll {
+  flex: 1;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0 8px 0 0;
 }

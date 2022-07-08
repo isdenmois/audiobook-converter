@@ -15,10 +15,12 @@
     "xstate": "^4.32.1"
   },
   "devDependencies": {
+    "@unocss/reset": "^0.43.2",
     "@vitejs/plugin-vue": "2.3.3",
     "electron": "19.0.7",
     "types": "workspace:*",
     "typescript": "4.7.4",
+    "unocss": "^0.43.2",
     "vite": "2.9.13",
     "vite-plugin-resolve": "^2.1.2",
     "vue-tsc": "0.38.2"
