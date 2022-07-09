@@ -2,7 +2,7 @@
 import { unref, ref, toRaw, computed, onMounted } from 'vue'
 import { Card, Dropdown, DropdownItem } from 'shared/ui'
 import { formatDuration } from 'shared/lib'
-import { currentIcon, currentAndBelowIcon } from 'shared/assets'
+import { currentIcon, currentAndBelowIcon, playIcon } from 'shared/assets'
 import { api } from 'shared/api'
 
 const props = defineProps(['book', 'saveLabel', 'cancelLabel'])
@@ -75,13 +75,13 @@ onMounted(() => {
 
       <p class="flex flex-row gap-3">
         <input
-            class="flex-1"
-            type="range"
-            min="0.1"
-            max="2.0"
-            step="0.1"
-            :value="speed"
-            @input="speed = +$event.target.value"
+          class="flex-1"
+          type="range"
+          min="0.1"
+          max="2.0"
+          step="0.1"
+          :value="speed"
+          @input="speed = +$event.target.value"
         />
         <span>{{ speed }}x, {{ duration }} </span>
       </p>
@@ -94,7 +94,7 @@ onMounted(() => {
         <div>{{ String(index + 1).padStart(3, '0') }}</div>
         <input class="flex-1" type="text" v-model="chapter.title" />
 
-        <div>{{formatDuration(chapter.duration, speed)}}</div>
+        <div>{{ formatDuration(chapter.duration, speed) }}</div>
 
         <Dropdown :image-src="currentIcon">
           <DropdownItem v-for="tag of Object.values(chapter.tags)" @click="chapter.title = tag">{{ tag }}</DropdownItem>
@@ -102,16 +102,18 @@ onMounted(() => {
 
         <Dropdown :image-src="currentAndBelowIcon">
           <DropdownItem v-for="tag of Object.keys(chapter.tags)" @click="setChaptersTags(index, tag)">{{
-              chapter.tags[tag]
-            }}</DropdownItem>
+            chapter.tags[tag]
+          }}</DropdownItem>
         </Dropdown>
+
+        <img :src="playIcon" />
       </li>
     </ol>
   </Card>
 
   <Card class="text-right mt-3">
-    <button class="secondary" @click="emit('cancel')">{{props.cancelLabel}}</button>
-    <button class="ml-3" @click="save">{{props.saveLabel}}</button>
+    <button class="secondary" @click="emit('cancel')">{{ props.cancelLabel }}</button>
+    <button class="ml-3" @click="save">{{ props.saveLabel }}</button>
   </Card>
 </template>
 
