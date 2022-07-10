@@ -1,8 +1,15 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { addToParse } from 'entities/media-parser'
 import { api } from 'shared/api'
 import { emptyBackground } from 'shared/assets'
 import { Card } from 'shared/ui'
+
+if (import.meta.env.PROD) {
+  onMounted(() => {
+    setTimeout(addBooks, 100)
+  })
+}
 
 const addBooks = async () => {
   try {
