@@ -10,10 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "fluent-ffmpeg": "^2.1.2",
-    "node-ffprobe": "^3.0.0"
+    "fluent-ffmpeg": "2.1.2",
+    "node-ffprobe": "3.0.0"
   },
   "devDependencies": {
-    "physical-cpu-count": "^2.0.0"
+    "physical-cpu-count": "2.0.0"
   }
 }
