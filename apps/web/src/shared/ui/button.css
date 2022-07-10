@@ -14,6 +14,10 @@ button.secondary {
   padding: 8px 24px;
 }
 
+button.dangerous {
+  background-color: var(--dangerous);
+}
+
 button:hover {
   opacity: 0.9;
 }

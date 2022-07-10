@@ -11,6 +11,8 @@ export const addBook = (book: any) => $books.set([...$books.get(), book])
 
 export const editBook = (book: any) => bookIdToEdit$.set(book.id)
 
+export const removeBook = (bookId: string) => $books.set($books.get().filter(book => book.id !== bookId))
+
 export const cancelEdit = () => bookIdToEdit$.set(null)
 
 export const updateBook = (data: any) => {

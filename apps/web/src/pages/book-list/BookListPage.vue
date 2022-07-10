@@ -2,12 +2,15 @@
 import { useStore } from '@nanostores/vue'
 import { ipcRenderer } from 'electron'
 import { $books, editBook } from 'entities/audiobook'
-import { computed, ref } from 'vue'
+import { computed, inject, ref } from 'vue'
 import { Card } from 'shared/ui'
 import { formatDuration } from 'shared/lib'
+import { api } from 'shared/api'
+import { timesIcon } from 'shared/assets'
 import { addToParse } from 'entities/media-parser'
 import { PathOpener, PathSelector, savePath$ } from 'entities/encode'
-import { api } from 'shared/api'
+
+const dialog: any = inject('dialog')
 
 const books = useStore($books)
 const currentBook = ref<any>(null)
@@ -57,10 +60,17 @@ ipcRenderer.on('encoder/progress', (_, { bookId, progress: percent }) => {
   <div class="flex flex-1 flex-col">
     <Card class="flex-1">
       <ul class="p-0">
-        <li v-for="book of books" :key="book.id" class="mb-2" @click="editBook(book)">
+        <li v-for="book of books" :key="book.id" class="flex flex-row items-center mb-2 gap-2" @click="editBook(book)">
           <img v-if="book.image" :src="`atom://${book.image}`" :alt="book.title" class="cover" />
           <span v-else class="cover cover_empty" />
-          {{ book.title }}, {{ formatDuration(book.duration / book.speed) }} ({{ book.speed }}x)
+
+          <div class="flex-1">
+            {{ book.title }}, {{ formatDuration(book.duration / book.speed) }} ({{ book.speed }}x)
+          </div>
+
+          <div class="remove p-2 items-center" @click.stop="dialog.open('removeBook', { book })">
+            <img :src="timesIcon" />
+          </div>
         </li>
       </ul>
     </Card>
@@ -109,5 +119,14 @@ li {
 
 li:hover {
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.remove {
+  display: none;
+  align-self: stretch;
+}
+
+li:hover .remove {
+  display: flex;
 }
 </style>

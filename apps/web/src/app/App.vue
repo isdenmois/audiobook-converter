@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { provide, ref } from 'vue'
 import { useStore } from '@nanostores/vue'
 import { api } from 'shared/api'
 import { HomePage } from 'pages/home'
@@ -7,7 +8,7 @@ import { BookFormPage } from 'pages/book-form'
 import { BookListPage } from 'pages/book-list'
 import { BookEditPage } from 'pages/book-edit'
 import { nextParsedMedia, parsed$ } from 'entities/media-parser'
-import { addBook } from 'entities/audiobook'
+import { addBook, BookRemoveDialog } from 'entities/audiobook'
 import { currentRoute$ } from './current-route'
 
 const route = useStore(currentRoute$)
@@ -22,6 +23,20 @@ const handleSave = (data: any) => {
   addBook(data)
   nextParsedMedia()
 }
+
+let id = 0
+const dialogs = ref<any[]>([])
+const DIALOG_TYPES: Record<string, any> = {
+  removeBook: BookRemoveDialog,
+}
+const open = (type: string, params: any) => {
+  dialogs.value.push({ id: id++, type, params })
+}
+const close = (dialog: any) => {
+  dialogs.value = dialogs.value.filter(d => d !== dialog)
+}
+
+provide('dialog', { open })
 </script>
 
 <template>
@@ -42,4 +57,38 @@ const handleSave = (data: any) => {
   <BookEditPage v-if="route === 'BOOK_EDIT'" />
 
   <BookListPage v-if="route === 'BOOK_LIST'" />
+
+  <div v-for="dialog of dialogs" :key="dialog.id" class="app-dialog">
+    <div class="backdrop" @click="close(dialog)"></div>
+    <div class="dialog-content">
+      <component :is="DIALOG_TYPES[dialog.type]" :params="dialog.params" @close="close(dialog)"></component>
+    </div>
+  </div>
 </template>
+
+<style>
+.app-dialog {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #000a;
+  z-index: 0;
+}
+
+.dialog-content {
+  z-index: 1;
+}
+</style>
