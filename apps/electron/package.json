@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "node scripts/watch.js",
     "build": "vite build",
-    "compile": "cross-env MODE=production electron-builder build --config .electron-builder.config.js -l",
+    "compile": "cross-env MODE=production electron-builder build --config .electron-builder.config.js -w",
     "watch": "node scripts/watch.js",
     "lint": "eslint . --ext js,ts",
     "typecheck:main": "tsc --noEmit -p tsconfig.json",

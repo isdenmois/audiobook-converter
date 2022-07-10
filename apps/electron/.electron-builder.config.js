@@ -15,7 +15,7 @@ const config = {
     output: '../../release',
   },
   asar: false,
-  files: ['dist/**', '!node_modules/**/*', 'node_modules/web/dist'],
+  files: ['dist/**', '!node_modules/**/*', 'node_modules/web/dist', 'public'],
   extraMetadata: {
     version: process.env.VITE_APP_VERSION,
   },
@@ -29,10 +29,11 @@ const config = {
   win: {
     target: [
       {
-        target: 'zip',
+        target: 'nsis',
         arch: ['x64'],
       },
     ],
+    icon: './public/icon.ico',
     artifactName: '${productName}_${version}.${ext}',
   },
 }
