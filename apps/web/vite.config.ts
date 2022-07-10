@@ -19,9 +19,10 @@ export default defineConfig({
     viteResolve({
       // Electron
       electron: `
-        const { ipcRenderer } = require('electron');
+        const { ipcRenderer, shell } = require('electron');
         export {
           ipcRenderer,
+          shell,
         }
       `,
     }),

@@ -1,16 +1,21 @@
 <script setup lang="ts">
 import { useStore } from '@nanostores/vue'
+import { api } from 'shared/api'
 import { HomePage } from 'pages/home'
 import { ParsingProgressPage } from 'pages/parsing'
 import { BookFormPage } from 'pages/book-form'
 import { BookListPage } from 'pages/book-list'
 import { nextParsedMedia, parsed$ } from 'entities/media-parser'
-import { currentRoute$ } from './current-route'
 import { addBook } from 'entities/audiobook'
+import { currentRoute$ } from './current-route'
 
 const route = useStore(currentRoute$)
 const parsed = useStore(parsed$)
 const isDev = import.meta.env.DEV
+
+const openUnoCss = () => {
+  api.shell.open('http://localhost:3999/__unocss')
+}
 
 const handleSave = (data: any) => {
   addBook(data)
@@ -20,6 +25,9 @@ const handleSave = (data: any) => {
 
 <template>
   <h3 v-if="isDev">Current route is: {{ route }}</h3>
+  <div v-if="isDev">
+    <button @click="openUnoCss">UnoCSS</button>
+  </div>
 
   <HomePage v-if="route === 'HOME'" />
   <ParsingProgressPage v-if="route === 'PARSING'" />
