@@ -10,6 +10,7 @@ import { addBook } from 'entities/audiobook'
 
 const route = useStore(currentRoute$)
 const parsed = useStore(parsed$)
+const isDev = import.meta.env.DEV
 
 const handleSave = (data: any) => {
   addBook(data)
@@ -18,7 +19,7 @@ const handleSave = (data: any) => {
 </script>
 
 <template>
-  <h3>Current route is: {{ route }}</h3>
+  <h3 v-if="isDev">Current route is: {{ route }}</h3>
 
   <HomePage v-if="route === 'HOME'" />
   <ParsingProgressPage v-if="route === 'PARSING'" />
