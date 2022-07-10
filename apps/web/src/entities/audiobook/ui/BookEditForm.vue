@@ -8,16 +8,17 @@ import { api } from 'shared/api'
 const props = defineProps(['book', 'saveLabel', 'cancelLabel'])
 const emit = defineEmits(['save', 'cancel'])
 const scrollRef = ref<HTMLElement | null>(null)
+const book = props.book
 
-let image = ref(props.book.image)
-let title = ref(props.book.title)
-let author = ref(props.book.author)
-let speed = ref(1.6)
-let chapters = ref(props.book.chapters.map((chapter: any) => ({ ...chapter })))
+let image = ref(book.image)
+let title = ref(book.title)
+let author = ref(book.author)
+let speed = ref(book.speed || 1.6)
+let chapters = ref(book.chapters.map((chapter: any) => ({ ...chapter })))
 
-const tags = Object.values(props.book.chapters[0].tags)
+const tags = Object.values(book.chapters[0].tags)
 
-const duration = computed(() => formatDuration(props.book.duration, speed.value))
+const duration = computed(() => formatDuration(book.duration, speed.value))
 
 const setChaptersTags = (index: number, tag: string) => {
   chapters.value.forEach((chapter: any, i: number) => {
@@ -29,7 +30,7 @@ const setChaptersTags = (index: number, tag: string) => {
 
 const save = () => {
   emit('save', {
-    ...props.book,
+    ...book,
     title: unref(title),
     author: unref(author),
     image: unref(image),

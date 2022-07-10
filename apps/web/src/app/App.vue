@@ -5,6 +5,7 @@ import { HomePage } from 'pages/home'
 import { ParsingProgressPage } from 'pages/parsing'
 import { BookFormPage } from 'pages/book-form'
 import { BookListPage } from 'pages/book-list'
+import { BookEditPage } from 'pages/book-edit'
 import { nextParsedMedia, parsed$ } from 'entities/media-parser'
 import { addBook } from 'entities/audiobook'
 import { currentRoute$ } from './current-route'
@@ -38,6 +39,7 @@ const handleSave = (data: any) => {
     @save="handleSave"
     @skip="nextParsedMedia"
   />
+  <BookEditPage v-if="route === 'BOOK_EDIT'" />
 
   <BookListPage v-if="route === 'BOOK_LIST'" />
 </template>

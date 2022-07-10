@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useStore } from '@nanostores/vue'
 import { ipcRenderer } from 'electron'
-import { $books } from 'entities/audiobook'
-import {computed, ref} from 'vue'
+import { $books, editBook } from 'entities/audiobook'
+import { computed, ref } from 'vue'
 import { Card } from 'shared/ui'
 import { formatDuration } from 'shared/lib'
 import { addToParse } from 'entities/media-parser'
@@ -45,8 +45,8 @@ ipcRenderer.on('encoder/progress', (_, { bookId, progress: percent }) => {
 <template>
   <div class="flex flex-1 flex-col">
     <Card class="flex-1">
-      <ul>
-        <li v-for="book of books" :key="book.id">
+      <ul class="p-0">
+        <li v-for="book of books" :key="book.id" class="mb-2" @click="editBook(book)">
           <img v-if="book.image" :src="`atom://${book.image}`" :alt="book.title" class="cover" />
           <span v-else class="cover cover_empty" />
           {{ book.title }}, {{ formatDuration(book.duration / book.speed) }} ({{ book.speed }}x)
@@ -60,9 +60,7 @@ ipcRenderer.on('encoder/progress', (_, { bookId, progress: percent }) => {
         <button @click="addBooks" :disabled="progress >= 0">Add audiobook</button>
       </div>
 
-      <div v-if="disabled && currentBook">
-        Current book: {{currentBook.title}}
-      </div>
+      <div v-if="disabled && currentBook">Current book: {{ currentBook.title }}</div>
 
       <p v-if="disabled">
         <progress max="100" :value="progress" />
@@ -83,5 +81,16 @@ ipcRenderer.on('encoder/progress', (_, { bookId, progress: percent }) => {
 
 .cover_empty {
   background-color: gray;
+}
+
+li {
+  cursor: pointer;
+  border-radius: 16px;
+  background-color: var(--card-background);
+  list-style-type: none;
+}
+
+li:hover {
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
 }
 </style>
