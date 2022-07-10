@@ -28,7 +28,7 @@ async function createWindow() {
   })
 
   if (import.meta.env.DEV) {
-    await browserWindow.loadURL('http://localhost:3000')
+    await browserWindow.loadURL('http://localhost:3999')
   } else {
     await browserWindow.loadFile('./node_modules/web/dist/index.html')
   }

@@ -8,12 +8,13 @@ import { presetUno } from 'unocss'
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '',
+  server: {
+    port: 3999,
+  },
   plugins: [
     vue(),
     Unocss({
-      presets: [
-        presetUno(),
-      ],
+      presets: [presetUno()],
     }),
     viteResolve({
       // Electron
