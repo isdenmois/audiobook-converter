@@ -6,17 +6,25 @@ import { computed, ref } from 'vue'
 import { Card } from 'shared/ui'
 import { formatDuration } from 'shared/lib'
 import { addToParse } from 'entities/media-parser'
+import { PathOpener, PathSelector, savePath$ } from 'entities/encode'
 import { api } from 'shared/api'
 
 const books = useStore($books)
 const currentBook = ref<any>(null)
 
+const destination = ref<string | null>(null)
+const done = ref(false)
 const progress = ref(-1)
+const savePath = useStore(savePath$)
 
 const disabled = computed(() => progress.value >= 0)
 
+const pathToOpen = computed(() => (done.value && destination.value ? destination.value : savePath.value))
+
 const startEncode = async () => {
-  const path = await api.dialog.selectSaveDirectory()
+  const path = await api.encoder.createDestinationDir(savePath$.get())
+
+  destination.value = path
 
   for (const book of $books.get()) {
     currentBook.value = book
@@ -27,6 +35,9 @@ const startEncode = async () => {
       console.error(e)
     }
   }
+
+  progress.value = -1
+  done.value = true
 }
 
 const addBooks = async () => {
@@ -56,6 +67,12 @@ ipcRenderer.on('encoder/progress', (_, { bookId, progress: percent }) => {
 
     <Card class="mt-4">
       <div v-if="!disabled" class="flex flex-row gap-3">
+        <PathSelector />
+
+        <PathOpener :path="pathToOpen" />
+
+        <div class="flex-1" />
+
         <button @click="startEncode" :disabled="progress >= 0">Encode</button>
         <button @click="addBooks" :disabled="progress >= 0">Add audiobook</button>
       </div>

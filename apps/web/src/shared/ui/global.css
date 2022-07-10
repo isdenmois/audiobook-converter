@@ -7,6 +7,7 @@
   --primary-text: #162b4a;
   --secondary-text: #8a95a9;
   --button-text: #fff;
+  --disabled-primary-text: #455162;
 }
 
 @font-face {
@@ -62,6 +63,11 @@ body {
 
 .text-s {
   font-size: 16px;
+}
+
+.text-xs {
+  font-size: 14px;
+  line-height: 16px;
 }
 
 .secondary {

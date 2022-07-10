@@ -1,3 +1,5 @@
+import { join } from 'path'
+import { access, mkdir } from 'fs/promises'
 import { app, BrowserWindow, dialog, ipcMain, OpenDialogOptions, protocol } from 'electron'
 import promiseIpc from 'electron-promise-ipc/build/mainProcess'
 import { parseDirectory } from './ffprobe-parser'
@@ -75,6 +77,24 @@ promiseIpc.on('dialog/open', async (options: any) => {
 
 promiseIpc.on('parser/parse', async (path: string): Promise<any> => {
   return parseDirectory(path)
+})
+
+promiseIpc.on('encode/create-dir', async (path: string): Promise<string> => {
+  const date = new Date()
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  const dirName = `${year}${month}${day}`
+
+  const destination = join(path, dirName)
+
+  try {
+    await access(destination)
+  } catch {
+    await mkdir(destination)
+  }
+
+  return destination
 })
 
 // ipcMain.on('open-file-dialog-dataset', event => {
