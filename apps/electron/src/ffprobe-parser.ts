@@ -1,6 +1,6 @@
 import os from 'os'
 // import ffprobe from 'node-ffprobe'
-import path from 'path'
+import path, { basename, extname } from 'path'
 import fs from 'fs'
 import { readdir } from 'fs/promises'
 // import Piscina from 'piscina'
@@ -54,6 +54,7 @@ export async function parseDirectory(dir: string): Promise<ParsedDirectoryResult
   const filePaths = files.map(file => path.join(dir, file))
 
   const parsed = await parsePool.run(filePaths)
+  let i = 1
 
   parsed.forEach(info => {
     if (!result.image && typeof info === 'string') {
@@ -64,17 +65,35 @@ export async function parseDirectory(dir: string): Promise<ParsedDirectoryResult
 
       if (info.chapters.length) {
         info.chapters.forEach(chapter => {
+          const number = String(i++)
+
           result.duration += chapter.duration
-          result.chapters.push({ ...chapter, path: info.path, hasImage: info.hasImage })
+          result.chapters.push({
+            ...chapter,
+            path: info.path,
+            hasImage: info.hasImage,
+            tags: {
+              number,
+              number2: number.padStart(2, '0'),
+              ...chapter.tags,
+            },
+          })
         })
       } else {
+        const number = String(i++)
         result.duration += info.duration
         result.chapters.push({
           path: info.path,
           duration: info.duration,
           title: info.tags.title,
-          tags: info.tags,
           hasImage: info.hasImage,
+          tags: {
+            number,
+            number2: number.padStart(2, '0'),
+            number3: number.padStart(3, '0'),
+            ...info.tags,
+            filename: basename(info.path, extname(info.path)),
+          },
         })
       }
     }
