@@ -14,7 +14,7 @@ const addBooks = async () => {
 </script>
 
 <template>
-  <div class="home-page flex flex-col">
+  <div class="home-page flex-1 p-3 flex flex-col">
     <Card class="home-empty flex flex-col">
       <img class="empty-img" :src="emptyBackground" />
       <div class="text-m mt-4">Start by adding the first audiobook</div>
@@ -26,8 +26,6 @@ const addBooks = async () => {
 
 <style>
 .home-page {
-  flex: 1;
-  padding: 24px;
   justify-content: stretch;
 }
 
