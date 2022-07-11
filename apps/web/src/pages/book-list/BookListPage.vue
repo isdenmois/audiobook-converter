@@ -83,8 +83,8 @@ ipcRenderer.on('encoder/progress', (_, { bookId, progress: percent }) => {
 
         <div class="flex-1" />
 
-        <button @click="startEncode" :disabled="progress >= 0">Encode</button>
         <button @click="addBooks" :disabled="progress >= 0">Add audiobook</button>
+        <button @click="startEncode" :disabled="progress >= 0">Encode</button>
       </div>
 
       <div v-if="disabled && currentBook">Current book: {{ currentBook.title }}</div>
