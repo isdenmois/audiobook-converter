@@ -9,7 +9,6 @@
   "dependencies": {
     "@nanostores/vue": "0.5.5",
     "@xstate/vue": "2.0.0",
-    "electron-promise-ipc": "2.2.4",
     "nanostores": "0.5.12",
     "vue": "3.2.37",
     "xstate": "4.32.1"

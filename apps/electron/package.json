@@ -28,7 +28,6 @@
     "vite-plugin-replace": "0.1.1"
   },
   "dependencies": {
-    "electron-promise-ipc": "2.2.4",
     "fluent-ffmpeg": "2.1.2",
     "node-ffprobe": "3.0.0",
     "piscina": "3.2.0",

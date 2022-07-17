@@ -1,15 +1,15 @@
-import { promiseIpc } from './promise-ipc'
+import { ipcRenderer } from 'electron'
 import { config } from 'shared/lib'
 import OpenDialogOptions = Electron.OpenDialogOptions
 
 export const openToParse = () =>
-  promiseIpc.send('dialog/open', {
+  ipcRenderer.invoke('dialog/open', {
     properties: ['openDirectory', 'multiSelections', 'openFile'],
     defaultPath: config.sourceBooksPath,
   }) as Promise<string[]>
 
 export const openCover = () =>
-  promiseIpc.send('dialog/open', {
+  ipcRenderer.invoke('dialog/open', {
     properties: ['openFile'],
     defaultPath: config.coversPath,
     buttonLabel: 'Select',
@@ -17,8 +17,8 @@ export const openCover = () =>
   }) as Promise<string[]>
 
 export const selectDirectory = () =>
-  promiseIpc
-    .send('dialog/open', <OpenDialogOptions>{
+  ipcRenderer
+    .invoke('dialog/open', <OpenDialogOptions>{
       properties: ['openDirectory', 'createDirectory'],
       defaultPath: config.saveDirectoryPath,
       buttonLabel: 'Select',

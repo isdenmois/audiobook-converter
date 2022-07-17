@@ -1,7 +1,6 @@
 import { join } from 'path'
 import { access, mkdir } from 'fs/promises'
-import { app, BrowserWindow, dialog, protocol, shell } from 'electron'
-import promiseIpc from 'electron-promise-ipc/build/mainProcess'
+import { app, BrowserWindow, dialog, protocol, shell, ipcMain } from 'electron'
 import { parseDirectory } from './ffprobe-parser'
 import { convert } from './ffmpeg-converter'
 import { restoreOrCreateWindow } from './mainWindow'
@@ -67,7 +66,7 @@ app.whenReady().then(() => {
 
 const getCurrentWindow = () => BrowserWindow.getAllWindows().find(w => !w.isDestroyed())!
 
-promiseIpc.on('dialog/open', async (options: any) => {
+ipcMain.handle('dialog/open', async (_, options: any) => {
   let window = getCurrentWindow()
 
   const { canceled, filePaths } = await dialog.showOpenDialog(window, options)
@@ -79,11 +78,11 @@ promiseIpc.on('dialog/open', async (options: any) => {
   return filePaths
 })
 
-promiseIpc.on('parser/parse', async (path: string): Promise<any> => {
+ipcMain.handle('parser/parse', async (_, path: string): Promise<any> => {
   return parseDirectory(path)
 })
 
-promiseIpc.on('encode/create-dir', async (path: string): Promise<string> => {
+ipcMain.handle('encode/create-dir', async (_, path: string): Promise<string> => {
   const date = new Date()
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
@@ -101,11 +100,11 @@ promiseIpc.on('encode/create-dir', async (path: string): Promise<string> => {
   return destination
 })
 
-promiseIpc.on('shell/openExternal', (url: string) => {
+ipcMain.handle('shell/openExternal', (_, url: string) => {
   shell.openExternal(url, { activate: true })
 })
 
-promiseIpc.on('shell/openPath', (path: string) => {
+ipcMain.handle('shell/openPath', (_, path: string) => {
   shell.openPath(path)
 })
 
@@ -134,12 +133,9 @@ promiseIpc.on('shell/openPath', (path: string) => {
 //     })
 // })
 
-promiseIpc.on('encoder/encode', async (book: any, path: string) => {
-  let window = getCurrentWindow()
-
+ipcMain.handle('encoder/encode', async ({ sender }, book: any, path: string) => {
   await convert(book, path, progress => {
-    window?.webContents.send('encoder/progress', { bookId: book.id, progress })
-    // promiseIpc.send('encoder/progress', { bookId: book.id, progress })
+    sender.send('encoder/progress', { bookId: book.id, progress })
   })
 })
 

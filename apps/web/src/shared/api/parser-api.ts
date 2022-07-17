@@ -1,3 +1,3 @@
-import { promiseIpc } from './promise-ipc'
+import { ipcRenderer } from 'electron'
 
-export const parse = (path: string) => promiseIpc.send('parser/parse', path) as Promise<any>
+export const parse = (path: string) => ipcRenderer.invoke('parser/parse', path) as Promise<any>
