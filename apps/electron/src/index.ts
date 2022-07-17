@@ -1,6 +1,6 @@
 import { join } from 'path'
 import { access, mkdir } from 'fs/promises'
-import { app, BrowserWindow, dialog, ipcMain, OpenDialogOptions, protocol } from 'electron'
+import { app, BrowserWindow, dialog, protocol, shell } from 'electron'
 import promiseIpc from 'electron-promise-ipc/build/mainProcess'
 import { parseDirectory } from './ffprobe-parser'
 import { convert } from './ffmpeg-converter'
@@ -65,8 +65,12 @@ app.whenReady().then(() => {
   })
 })
 
+const getCurrentWindow = () => BrowserWindow.getAllWindows().find(w => !w.isDestroyed())!
+
 promiseIpc.on('dialog/open', async (options: any) => {
-  const { canceled, filePaths } = await dialog.showOpenDialog(options)
+  let window = getCurrentWindow()
+
+  const { canceled, filePaths } = await dialog.showOpenDialog(window, options)
 
   if (canceled || !filePaths.length) {
     throw 'Not selected'
@@ -97,6 +101,14 @@ promiseIpc.on('encode/create-dir', async (path: string): Promise<string> => {
   return destination
 })
 
+promiseIpc.on('shell/openExternal', (url: string) => {
+  shell.openExternal(url, { activate: true })
+})
+
+promiseIpc.on('shell/openPath', (path: string) => {
+  shell.openPath(path)
+})
+
 // ipcMain.on('open-file-dialog-dataset', event => {
 //   dialog
 //     .showOpenDialog({
@@ -123,7 +135,7 @@ promiseIpc.on('encode/create-dir', async (path: string): Promise<string> => {
 // })
 
 promiseIpc.on('encoder/encode', async (book: any, path: string) => {
-  let window = BrowserWindow.getAllWindows().find(w => !w.isDestroyed())
+  let window = getCurrentWindow()
 
   await convert(book, path, progress => {
     window?.webContents.send('encoder/progress', { bookId: book.id, progress })

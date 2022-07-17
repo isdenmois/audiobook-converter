@@ -1,9 +1,5 @@
-import { shell } from 'electron'
+import { promiseIpc } from './promise-ipc'
 
-export const open = (url: string) => {
-  shell.openExternal(url)
-}
+export const open = (url: string) => promiseIpc.send('shell/openExternal', url)
 
-export const openPath = (path: string) => {
-  shell.openPath(path)
-}
+export const openPath = (path: string) => promiseIpc.send('shell/openPath', path)
