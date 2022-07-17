@@ -4,8 +4,7 @@ import { api } from 'shared/api'
 </script>
 
 <script setup lang="ts">
-import { Player } from 'entities/audioplayer'
-import { Card, Dropdown, DropdownItem } from 'shared/ui'
+import { Card, Dropdown, DropdownItem, Player } from 'shared/ui'
 import { currentIcon, currentAndBelowIcon } from 'shared/assets'
 import { formatDuration } from 'shared/lib'
 

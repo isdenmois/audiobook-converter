@@ -1,7 +1,9 @@
-import { Howl } from 'howler'
 import { computed, onUnmounted, Ref, watch } from 'vue'
+import { Howl } from 'howler'
+import { atom } from 'nanostores'
 import { useStore } from '@nanostores/vue'
-import { playing$ } from '../model'
+
+export const playing$ = atom<string | null>(null)
 
 export const usePlayer = (path: string, speed: Ref<number>) => {
   const current = useStore(playing$)

@@ -1,10 +1,10 @@
 <script lang="ts">
+import { ref, watch } from 'vue'
 import { usePlayer } from './use-player'
 </script>
 
 <script lang="ts" setup>
 import { playIcon, pauseIcon } from 'shared/assets'
-import { ref, watch } from 'vue'
 
 const props = defineProps<{ path: string; speed: number }>()
 const speed = ref(props.speed)
