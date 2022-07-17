@@ -5,6 +5,6 @@ export const encode = (book: any, path: string) => ipcRenderer.invoke('encoder/e
 
 export const createDestinationDir = (path: string) => ipcRenderer.invoke('encode/create-dir', path) as Promise<string>
 
-ipcRenderer.on('encoder/progress', ({ bookId, progress }: any) => {
+ipcRenderer.on('encoder/progress', (_, { bookId, progress }: any) => {
   events.send('encode/progress', { bookId, progress })
 })

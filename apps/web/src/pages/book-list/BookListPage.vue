@@ -1,47 +1,18 @@
 <script setup lang="ts">
+import { inject } from 'vue'
 import { useStore } from '@nanostores/vue'
-import { ipcRenderer } from 'electron'
 import { $books, editBook } from 'entities/audiobook'
-import { computed, inject, ref } from 'vue'
 import { Card } from 'shared/ui'
 import { formatDuration } from 'shared/lib'
 import { api } from 'shared/api'
 import { timesIcon } from 'shared/assets'
 import { addToParse } from 'entities/media-parser'
-import { PathOpener, PathSelector, savePath$ } from 'entities/encode'
+import { PathOpener, PathSelector, startEncode, savePath$ } from 'features/encode'
 
 const dialog: any = inject('dialog')
 
 const books = useStore($books)
-const currentBook = ref<any>(null)
-
-const destination = ref<string | null>(null)
-const done = ref(false)
-const progress = ref(-1)
 const savePath = useStore(savePath$)
-
-const disabled = computed(() => progress.value >= 0)
-
-const pathToOpen = computed(() => (done.value && destination.value ? destination.value : savePath.value))
-
-const startEncode = async () => {
-  const path = await api.encoder.createDestinationDir(savePath$.get())
-
-  destination.value = path
-
-  for (const book of $books.get()) {
-    currentBook.value = book
-
-    try {
-      await api.encoder.encode(JSON.parse(JSON.stringify(book)), path)
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  progress.value = -1
-  done.value = true
-}
 
 const addBooks = async () => {
   try {
@@ -50,10 +21,6 @@ const addBooks = async () => {
     addToParse(paths)
   } catch {}
 }
-
-ipcRenderer.on('encoder/progress', (_, { bookId, progress: percent }) => {
-  progress.value = percent
-})
 </script>
 
 <template>
@@ -76,23 +43,16 @@ ipcRenderer.on('encoder/progress', (_, { bookId, progress: percent }) => {
     </Card>
 
     <Card class="mt-4">
-      <div v-if="!disabled" class="flex flex-row gap-3">
-        <PathSelector />
+      <div class="flex flex-row gap-3">
+        <PathSelector :path="savePath" />
 
-        <PathOpener :path="pathToOpen" />
+        <PathOpener :path="savePath" />
 
         <div class="flex-1" />
 
-        <button @click="addBooks" :disabled="progress >= 0">Add audiobook</button>
-        <button @click="startEncode" :disabled="progress >= 0">Encode</button>
+        <button @click="addBooks">Add audiobook</button>
+        <button @click="startEncode">Encode</button>
       </div>
-
-      <div v-if="disabled && currentBook">Current book: {{ currentBook.title }}</div>
-
-      <p v-if="disabled">
-        <progress max="100" :value="progress" />
-        {{ Math.round(progress) }}%
-      </p>
     </Card>
   </div>
 </template>
