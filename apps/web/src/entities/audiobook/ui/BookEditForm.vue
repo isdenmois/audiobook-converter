@@ -1,9 +1,13 @@
-<script setup lang="ts">
+<script lang="ts">
 import { unref, ref, toRaw, computed, onMounted } from 'vue'
-import { Card, Dropdown, DropdownItem } from 'shared/ui'
-import { formatDuration } from 'shared/lib'
-import { currentIcon, currentAndBelowIcon, playIcon } from 'shared/assets'
 import { api } from 'shared/api'
+</script>
+
+<script setup lang="ts">
+import { Player } from 'entities/audioplayer'
+import { Card, Dropdown, DropdownItem } from 'shared/ui'
+import { currentIcon, currentAndBelowIcon } from 'shared/assets'
+import { formatDuration } from 'shared/lib'
 
 const props = defineProps(['book', 'saveLabel', 'cancelLabel'])
 const emit = defineEmits(['save', 'cancel'])
@@ -91,8 +95,16 @@ onMounted(() => {
 
   <Card class="overflow-hidden flex flex-col flex-1 mt-3">
     <ol class="scroll" ref="scrollRef">
-      <li class="flex flex-row gap-3 items-center mt-2" v-for="(chapter, index) in chapters" :key="chapter.path">
+      <li
+        class="flex flex-row gap-3 items-center mt-2 relative"
+        v-for="(chapter, index) in chapters"
+        :key="chapter.path"
+      >
         <div>{{ String(index + 1).padStart(3, '0') }}</div>
+
+        <div class="player">
+          <Player :path="chapter.path" :speed="speed" />
+        </div>
         <input class="flex-1" type="text" v-model="chapter.title" />
 
         <div>{{ formatDuration(chapter.duration, speed) }}</div>
@@ -106,8 +118,6 @@ onMounted(() => {
             chapter.tags[tag]
           }}</DropdownItem>
         </Dropdown>
-
-        <img :src="playIcon" />
       </li>
     </ol>
   </Card>
@@ -130,5 +140,14 @@ onMounted(() => {
 
 .cover_empty {
   background-color: gray;
+}
+
+.player {
+  position: absolute;
+  left: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 </style>

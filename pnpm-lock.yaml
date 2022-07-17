@@ -54,10 +54,12 @@ importers:
   apps/web:
     specifiers:
       '@nanostores/vue': 0.5.5
+      '@types/howler': ^2.2.7
       '@unocss/reset': 0.44.3
       '@vitejs/plugin-vue': 3.0.0
       '@xstate/vue': 2.0.0
       electron: 19.0.8
+      howler: 2.2.3
       nanostores: 0.5.12
       types: workspace:*
       typescript: 4.7.4
@@ -70,10 +72,12 @@ importers:
     dependencies:
       '@nanostores/vue': 0.5.5_ympl27tda4o7w6en7idglmssei
       '@xstate/vue': 2.0.0_vue@3.2.37+xstate@4.32.1
+      howler: 2.2.3
       nanostores: 0.5.12
       vue: 3.2.37
       xstate: 4.32.1
     devDependencies:
+      '@types/howler': 2.2.7
       '@unocss/reset': 0.44.3
       '@vitejs/plugin-vue': 3.0.0_vite@3.0.0+vue@3.2.37
       electron: 19.0.8
@@ -372,6 +376,10 @@ packages:
       '@types/node': 18.0.5
     dev: true
     optional: true
+
+  /@types/howler/2.2.7:
+    resolution: {integrity: sha512-PEZldwZqJJw1PWRTpupyC7ajVTZA8aHd8nB/Y0n6zRZi5u8ktYDntsHj13ltEiBRqWwF06pASxBEvCTxniG8eA==}
+    dev: true
 
   /@types/json-schema/7.0.11:
     resolution: {integrity: sha512-wOuvG1SN4Us4rez+tylwwwCV1psiNVOkJeM3AUWUNWg/jDQY2+HE/444y5gc+jBmRqASOm2Oeh5c1axHobwRKQ==}
@@ -2424,6 +2432,10 @@ packages:
     dependencies:
       lru-cache: 6.0.0
     dev: true
+
+  /howler/2.2.3:
+    resolution: {integrity: sha512-QM0FFkw0LRX1PR8pNzJVAY25JhIWvbKMBFM4gqk+QdV+kPXOhleWGCB6AiAF/goGjIHK2e/nIElplvjQwhr0jg==}
+    dev: false
 
   /http-cache-semantics/4.1.0:
     resolution: {integrity: sha512-carPklcUh7ROWRK7Cv27RPtdhYhUsela/ue5/jKzjegVvXDqM2ILE9Q2BGn9JZJh1g87cp56su/FgQSzcWS8cQ==}
