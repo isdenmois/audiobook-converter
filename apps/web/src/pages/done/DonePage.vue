@@ -1,16 +1,28 @@
 <script lang="ts">
 import { useStore } from '@nanostores/vue'
-import { currentBook$, progress$ } from 'features/encode'
-import { $books } from 'entities/audiobook'
+import { $books, resetBooks } from 'entities/audiobook'
+import { addToParse } from 'entities/media-parser'
+import { api } from 'shared/api'
 import { Card } from 'shared/ui'
+import { currentDestination$, resetDone } from 'features/encode'
 </script>
 
 <script setup lang="ts">
+import { PathOpener, PathSelector } from 'features/encode'
 import { formatDuration } from 'shared/lib'
 
 const books = useStore($books)
-const currentBook = useStore(currentBook$)
-const progress = useStore(progress$)
+const pathToOpen = useStore(currentDestination$)
+
+const startAgain = async () => {
+  try {
+    const paths = await api.dialog.openToParse()
+
+    addToParse(paths)
+    resetBooks()
+    resetDone()
+  } catch {}
+}
 </script>
 
 <template>
@@ -30,13 +42,12 @@ const progress = useStore(progress$)
 
     <Card class="mt-4">
       <div class="flex flex-row gap-3">
-        <img v-if="currentBook.image" :src="`atom://${currentBook.image}`" :alt="currentBook.title" class="cover" />
+        <PathSelector :path="pathToOpen" :disabled="true" />
+        <PathOpener :path="pathToOpen" />
 
-        <div class="flex flex-col flex-1">
-          <div>{{ currentBook.title }}</div>
-          <progress class="mt-2" max="100" :value="progress" />
-          <div class="mt-1 text-xs">Converting: {{ Math.round(progress) }}%</div>
-        </div>
+        <div class="flex-1" />
+
+        <button @click="startAgain">Add audiobook</button>
       </div>
     </Card>
   </div>
@@ -59,24 +70,5 @@ li {
   border-radius: 16px;
   background-color: var(--card-background);
   list-style-type: none;
-}
-
-progress {
-  height: 16px;
-  appearance: none;
-  width: 100%;
-  border-radius: 4px;
-  overflow: hidden;
-  color: red;
-  background-color: red;
-}
-
-progress::-webkit-progress-bar {
-  background-color: #e3ebfe;
-}
-
-progress::-webkit-progress-value {
-  background-color: #4484ff;
-  border-radius: 4px;
 }
 </style>

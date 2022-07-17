@@ -20,6 +20,10 @@ export const currentRoute$ = computed(
       return 'BOOK_EDIT'
     }
 
+    if (done) {
+      return 'DONE'
+    }
+
     if (currentBookId !== null) {
       return 'ENCODING'
     }

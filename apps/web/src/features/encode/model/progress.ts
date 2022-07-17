@@ -10,6 +10,10 @@ export const currentBook$ = computed([$books, currentBookId$], (books, currentBo
   books.find(book => book.id === currentBookId),
 )
 
+export const resetDone = () => {
+  done$.set(false)
+}
+
 events.on('encode/progress', ({ bookId, progress }: any) => {
   if (currentBookId$.get() !== bookId) {
     currentBookId$.set(bookId)

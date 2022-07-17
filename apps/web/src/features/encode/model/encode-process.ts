@@ -24,4 +24,5 @@ export const startEncode = async () => {
 
   done$.set(true)
   progress$.set(-1)
+  currentBookId$.set(null)
 }

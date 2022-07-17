@@ -8,6 +8,7 @@ import { BookFormPage } from 'pages/book-form'
 import { BookListPage } from 'pages/book-list'
 import { BookEditPage } from 'pages/book-edit'
 import { EncodePage } from 'pages/encode'
+import { DonePage } from 'pages/done'
 import { nextParsedMedia, parsed$ } from 'entities/media-parser'
 import { addBook, BookRemoveDialog } from 'entities/audiobook'
 import { currentRoute$ } from './current-route'
@@ -60,6 +61,8 @@ provide('dialog', { open })
   <BookListPage v-if="route === 'BOOK_LIST'" />
 
   <EncodePage v-if="route === 'ENCODING'" />
+
+  <DonePage v-if="route === 'DONE'" />
 
   <div v-for="dialog of dialogs" :key="dialog.id" class="app-dialog">
     <div class="backdrop" @click="close(dialog)"></div>
