@@ -29,7 +29,11 @@ toParse$.listen(async paths => {
       try {
         const metadata = await api.parser.parse(path)
 
-        addParsed(metadata)
+        if (metadata?.chapters?.length) {
+          addParsed(metadata)
+        } else {
+          throw {}
+        }
       } catch {
         events.send('error', `Can't parse "${path}"`)
       } finally {

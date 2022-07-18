@@ -2,7 +2,7 @@ import os from 'os'
 // import ffprobe from 'node-ffprobe'
 import path, { basename, extname } from 'path'
 import fs from 'fs'
-import { readdir } from 'fs/promises'
+import { readdir, stat } from 'fs/promises'
 // import Piscina from 'piscina'
 import Ffmpeg from 'fluent-ffmpeg'
 import { PromisePool } from './promise-pool'
@@ -21,10 +21,6 @@ if (process.platform === 'win32') {
   Ffmpeg.setFfprobePath('/usr/bin/ffprobe')
 }
 
-const parser = async (path: string): Promise<any> => {
-  return '/pisya/' + path + '/zhopa'
-}
-
 const parsePool = new PromisePool(parseFile)
 
 let getId = 0
@@ -38,8 +34,28 @@ interface ParsedDirectoryResult {
   duration: number
 }
 
-export async function parseDirectory(dir: string): Promise<ParsedDirectoryResult> {
+const getFilePaths = async (dir: string): Promise<string[]> => {
+  const paths = []
   const files = await readdir(dir)
+
+  for (const file of files) {
+    const filePath = path.join(dir, file)
+
+    try {
+      const fileStat = await stat(filePath)
+
+      if (fileStat.isDirectory()) {
+        paths.push(...(await getFilePaths(filePath)))
+      } else {
+        paths.push(filePath)
+      }
+    } catch {}
+  }
+
+  return paths
+}
+
+export async function parseDirectory(dir: string): Promise<ParsedDirectoryResult> {
   const result: ParsedDirectoryResult = {
     id: ++getId,
     title: '',
@@ -50,8 +66,7 @@ export async function parseDirectory(dir: string): Promise<ParsedDirectoryResult
   }
 
   console.time('parseChapters')
-
-  const filePaths = files.map(file => path.join(dir, file))
+  const filePaths = await getFilePaths(dir)
 
   const parsed = await parsePool.run(filePaths)
   let i = 1

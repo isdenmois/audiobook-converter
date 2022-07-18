@@ -11,6 +11,8 @@ import { EncodePage } from 'pages/encode'
 import { DonePage } from 'pages/done'
 import { nextParsedMedia, parsed$ } from 'entities/media-parser'
 import { addBook, BookRemoveDialog } from 'entities/audiobook'
+import { events } from 'shared/lib'
+import { ErrorDialog } from 'shared/ui'
 import { currentRoute$ } from './current-route'
 
 const route = useStore(currentRoute$)
@@ -29,6 +31,7 @@ const handleSave = (data: any) => {
 let id = 0
 const dialogs = ref<any[]>([])
 const DIALOG_TYPES: Record<string, any> = {
+  error: ErrorDialog,
   removeBook: BookRemoveDialog,
 }
 const open = (type: string, params: any) => {
@@ -37,6 +40,10 @@ const open = (type: string, params: any) => {
 const close = (dialog: any) => {
   dialogs.value = dialogs.value.filter(d => d !== dialog)
 }
+
+events.on('error', (error: string) => {
+  open('error', { error })
+})
 
 provide('dialog', { open })
 </script>

@@ -3,7 +3,7 @@ defineProps<{ title: string; description?: string }>()
 </script>
 
 <template>
-  <div class="dialog p-3 b-rd-1.5">
+  <div class="dialog p-3 b-rd-1.5 mx-3">
     <h3 class="text-m">{{ title }}</h3>
     <div v-if="description" class="text-s secondary mt-1.5">{{ description }}</div>
 
