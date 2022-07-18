@@ -1,6 +1,7 @@
 <script lang="ts">
-import { unref, ref, toRaw, computed, onMounted } from 'vue'
+import { unref, ref, toRaw, computed, onMounted, inject } from 'vue'
 import { api } from 'shared/api'
+import { interpolate } from 'shared/lib'
 </script>
 
 <script setup lang="ts">
@@ -31,6 +32,14 @@ const setChaptersTags = (index: number, tag: string) => {
   })
 }
 
+const applyChapterTags = (index: number, text: string) => {
+  chapters.value.forEach((chapter: any, i: number) => {
+    if (i >= index) {
+      chapter.title = interpolate(text, chapter.tags)
+    }
+  })
+}
+
 const save = () => {
   emit('save', {
     ...book,
@@ -48,6 +57,12 @@ const selectCover = async () => {
 
     image.value = imagePath
   } catch {}
+}
+
+const dialog = inject<any>('dialog')
+
+const openChapterEditor = (index: number, chapter: any) => {
+  dialog.open('chapterEditor', { tags: chapter.tags, apply: (text: string) => applyChapterTags(index, text) })
 }
 
 onMounted(() => {
@@ -116,6 +131,7 @@ onMounted(() => {
           <DropdownItem v-for="tag of Object.keys(chapter.tags)" @click="setChaptersTags(index, tag)">{{
             chapter.tags[tag]
           }}</DropdownItem>
+          <DropdownItem @click="openChapterEditor(index, chapter)">Chapter Editor</DropdownItem>
         </Dropdown>
       </li>
     </ol>

@@ -73,7 +73,9 @@ const dropdownShown = (ref: any | null) => {
 .dropdown-content {
   position: fixed;
   background-color: #f1f1f1;
-  width: 200px;
+  max-width: 400px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 1;
 }

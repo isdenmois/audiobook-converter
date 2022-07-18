@@ -11,6 +11,9 @@ a {
   padding: 12px 16px;
   text-decoration: none;
   display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 a:hover {
