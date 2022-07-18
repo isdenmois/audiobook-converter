@@ -26,9 +26,9 @@ const startAgain = async () => {
 </script>
 
 <template>
-  <div class="flex flex-1 flex-col">
-    <Card class="flex-1">
-      <ul class="p-0">
+  <div class="flex flex-1 flex-col overflow-hidden">
+    <Card class="flex-1 overflow-hidden flex flex-col">
+      <ul class="p-0 overflow-y-auto">
         <li v-for="book of books" :key="book.id" class="flex flex-row items-center mb-2 gap-2">
           <img v-if="book.image" :src="`atom://${book.image}`" :alt="book.title" class="cover" />
           <span v-else class="cover cover_empty" />
