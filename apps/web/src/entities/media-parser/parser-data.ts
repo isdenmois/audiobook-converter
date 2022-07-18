@@ -7,7 +7,17 @@ export const parsed$ = atom<any[]>([])
 
 export const parseInProgress$ = atom(false)
 
+export const addedToParse$ = atom(0)
+export const currentParsedNumber$ = computed([addedToParse$, toParse$, parsed$], (addedToParse, toParse, parsed) => {
+  return addedToParse - toParse.length - parsed.length + 1
+})
+export const parseAddProgress$ = computed(
+  [currentParsedNumber$, addedToParse$],
+  (current, total) => `${current} / ${total}`,
+)
+
 export const addToParse = (paths: string[]) => {
+  addedToParse$.set(paths.length)
   toParse$.set(paths)
   // events.send('add-to-parse')
 }

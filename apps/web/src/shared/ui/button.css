@@ -25,3 +25,7 @@ button:hover {
 button:active {
   opacity: 0.5;
 }
+
+button[disabled] {
+  opacity: 0.2;
+}

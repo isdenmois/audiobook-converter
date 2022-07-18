@@ -8,7 +8,7 @@ import { Card, Dropdown, DropdownItem, Player } from 'shared/ui'
 import { currentIcon, currentAndBelowIcon } from 'shared/assets'
 import { formatDuration } from 'shared/lib'
 
-const props = defineProps(['book', 'saveLabel', 'cancelLabel'])
+const props = defineProps(['book', 'saveLabel', 'cancelLabel', 'progress'])
 const emit = defineEmits(['save', 'cancel'])
 const scrollRef = ref<HTMLElement | null>(null)
 const book = props.book
@@ -121,7 +121,13 @@ onMounted(() => {
     </ol>
   </Card>
 
-  <Card class="text-right mt-3">
+  <Card class="flex flex-row mt-3 items-center">
+    <div v-if="progress">
+      {{ progress }}
+    </div>
+
+    <div class="flex-1" />
+
     <button class="secondary" @click="emit('cancel')">{{ props.cancelLabel }}</button>
     <button class="ml-3" @click="save">{{ props.saveLabel }}</button>
   </Card>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject } from 'vue'
+import { inject, ref } from 'vue'
 import { useStore } from '@nanostores/vue'
 import { $books, editBook } from 'entities/audiobook'
 import { Card } from 'shared/ui'
@@ -13,6 +13,11 @@ const dialog: any = inject('dialog')
 
 const books = useStore($books)
 const savePath = useStore(savePath$)
+const encodeDisabled = ref(true)
+
+setTimeout(() => {
+  encodeDisabled.value = false
+}, 1000)
 
 const addBooks = async () => {
   try {
@@ -51,7 +56,7 @@ const addBooks = async () => {
         <div class="flex-1" />
 
         <button @click="addBooks">Add audiobook</button>
-        <button @click="startEncode">Encode</button>
+        <button @click="startEncode" :disabled="encodeDisabled">Encode</button>
       </div>
     </Card>
   </div>
