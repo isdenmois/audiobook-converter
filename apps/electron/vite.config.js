@@ -13,6 +13,7 @@ const config = {
   root: PACKAGE_ROOT,
   envDir: process.cwd(),
   plugins: [
+    // `fluent-ffmpeg` is required of this package
     replaceCodePlugin({
       replacements: [
         {
