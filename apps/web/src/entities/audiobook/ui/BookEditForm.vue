@@ -27,7 +27,11 @@ const duration = computed(() => formatDuration(book.duration, speed.value))
 const setChaptersTags = (index: number, tag: string) => {
   chapters.value.forEach((chapter: any, i: number) => {
     if (i >= index) {
-      chapter.title = chapter.tags[tag]
+      if (tag === 'start_with_1') {
+        chapter.title = String(i - index + 1)
+      } else {
+        chapter.title = chapter.tags[tag]
+      }
     }
   })
 }
@@ -35,7 +39,11 @@ const setChaptersTags = (index: number, tag: string) => {
 const applyChapterTags = (index: number, text: string) => {
   chapters.value.forEach((chapter: any, i: number) => {
     if (i >= index) {
-      chapter.title = interpolate(text, chapter.tags)
+      let tags = chapter.tags
+      if (text.includes('start_with_1')) {
+        tags = { ...tags, start_with_1: String(i - index + 1) }
+      }
+      chapter.title = interpolate(text, tags)
     }
   })
 }
@@ -131,6 +139,7 @@ onMounted(() => {
           <DropdownItem v-for="tag of Object.keys(chapter.tags)" @click="setChaptersTags(index, tag)">{{
             chapter.tags[tag]
           }}</DropdownItem>
+          <DropdownItem @click="setChaptersTags(index, 'start_with_1')">Start with 1</DropdownItem>
           <DropdownItem @click="openChapterEditor(index, chapter)">Chapter Editor</DropdownItem>
         </Dropdown>
       </li>

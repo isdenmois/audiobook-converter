@@ -5,10 +5,11 @@ import { Dialog } from 'shared/ui'
 
 const { params } = defineProps<{ params: { tags: any; apply: (value: string) => void } }>()
 const emit = defineEmits(['close'])
-const tags: string[] = Object.keys(params.tags)
+const tagValues = { ...params.tags, start_with_1: 1 }
+const tags: string[] = Object.keys(tagValues)
 
 const text = ref('{{number}} - {{title}}')
-const interpolated = computed(() => interpolate(text.value, params.tags))
+const interpolated = computed(() => interpolate(text.value, tagValues))
 
 const appendTag = (tag: string) => {
   text.value += `{{${tag}}}`
@@ -38,7 +39,7 @@ const apply = () => {
         </div>
 
         <div class="text-s">
-          {{ params.tags[tag] }}
+          {{ tagValues[tag] }}
         </div>
       </li>
     </ul>
