@@ -87,15 +87,15 @@ onMounted(() => {
 
     <div class="flex-1 ml-3">
       <p class="flex flex-row gap-3 items-center">
-        <input class="flex-1" type="text" v-model="title" />
-        <Dropdown :image-src="currentIcon">
+        <input class="flex-1" type="text" v-model="title" placeholder="Title" />
+        <Dropdown :image-src="currentIcon" title="Select the book title">
           <DropdownItem v-for="tag of tags" @click="title = tag">{{ tag }}</DropdownItem>
         </Dropdown>
       </p>
 
       <p class="flex flex-row gap-3 items-center">
-        <input class="flex-1" type="text" v-model="author" />
-        <Dropdown :image-src="currentIcon">
+        <input class="flex-1" type="text" v-model="author" placeholder="Author" />
+        <Dropdown :image-src="currentIcon" title="Select the book author">
           <DropdownItem v-for="tag of tags" @click="author = tag">{{ tag }}</DropdownItem>
         </Dropdown>
       </p>
@@ -127,15 +127,15 @@ onMounted(() => {
         <div class="player">
           <Player :path="chapter.path" :speed="speed" />
         </div>
-        <input class="flex-1" type="text" v-model="chapter.title" />
+        <input class="flex-1" type="text" v-model="chapter.title" placeholder="Chapter title" />
 
         <div>{{ formatDuration(chapter.duration, speed) }}</div>
 
-        <Dropdown :image-src="currentIcon">
+        <Dropdown :image-src="currentIcon" title="Select the chapter title">
           <DropdownItem v-for="tag of Object.values(chapter.tags)" @click="chapter.title = tag">{{ tag }}</DropdownItem>
         </Dropdown>
 
-        <Dropdown :image-src="currentAndBelowIcon">
+        <Dropdown :image-src="currentAndBelowIcon" title="Select titles for this chapter and below">
           <DropdownItem v-for="tag of Object.keys(chapter.tags)" @click="setChaptersTags(index, tag)">{{
             chapter.tags[tag]
           }}</DropdownItem>

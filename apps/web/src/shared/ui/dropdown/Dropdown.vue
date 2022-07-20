@@ -1,7 +1,10 @@
-<script setup lang="ts">
-import { computed, ref, StyleValue, VNodeRef } from 'vue'
+<script lang="ts">
+import { computed, ref, StyleValue } from 'vue'
+</script>
 
+<script setup lang="ts">
 const props = defineProps<{
+  title?: string
   size?: number
   imageSrc: string
 }>()
@@ -53,6 +56,7 @@ const dropdownShown = (ref: any | null) => {
 
     <teleport v-if="opened" to="#modals">
       <div class="dropdown-content" :style="position" :ref="dropdownShown">
+        <div v-if="title" class="dropdown-content__title text-m">{{ title }}</div>
         <slot></slot>
       </div>
     </teleport>
@@ -72,15 +76,16 @@ const dropdownShown = (ref: any | null) => {
 
 .dropdown-content {
   position: fixed;
-  background-color: #f1f1f1;
+  background-color: var(--card-background);
+  border-radius: 12px;
   max-width: 400px;
   max-height: calc(100vh - 32px);
   overflow-y: auto;
-  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   z-index: 1;
 }
 
-.dropdown:hover .dropbtn {
-  background-color: #eee;
+.dropdown-content__title {
+  padding: 16px;
 }
 </style>
