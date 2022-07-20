@@ -6,20 +6,23 @@ button {
   padding: 8px 48px;
   cursor: pointer;
   border-radius: 8px;
+  font-weight: 600;
 }
 
 button.secondary {
-  background-color: var(--button-secondary);
+  background-color: var(--button-secondary-background);
   color: var(--primary-text);
   padding: 8px 24px;
+  font-weight: 400;
 }
 
 button.dangerous {
   background-color: var(--dangerous);
+  font-weight: 400;
 }
 
 button:hover {
-  opacity: 0.9;
+  opacity: 0.8;
 }
 
 button:active {
