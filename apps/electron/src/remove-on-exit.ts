@@ -11,7 +11,7 @@ fs.access(tmpDir)
   .then(() => fs.access(tmpDir))
   .catch(() => fs.mkdir(tmpDir))
 
-const toRemove: string[] = []
+let toRemove: string[] = []
 
 export const createTempFile = (fileName: string) => {
   const filePath = path.join(tmpDir, fileName)
@@ -19,6 +19,18 @@ export const createTempFile = (fileName: string) => {
   toRemove.push(filePath)
 
   return filePath
+}
+
+export const removeFiles = async (paths: string[]) => {
+  for (const path of paths) {
+    try {
+      await fs.access(path)
+      await fs.unlink(path)
+    } catch {
+    } finally {
+      toRemove = toRemove.filter(pathToRemove => pathToRemove === path)
+    }
+  }
 }
 
 process.on('exit', () => {
