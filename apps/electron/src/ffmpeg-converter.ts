@@ -2,7 +2,7 @@ import ffmpeg from 'fluent-ffmpeg'
 import fs from 'fs/promises'
 import path from 'path'
 import { spawnSync } from 'child_process'
-import { PromisePool } from './promise-pool'
+import { PromisePool } from 'promise-pool'
 import { createTempFile, removeFiles } from './remove-on-exit'
 import { convertToAac as convertToAacWorker } from './convert.worker.mjs'
 
