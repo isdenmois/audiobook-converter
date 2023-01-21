@@ -96,16 +96,20 @@ export async function parseDirectory(dir: string): Promise<ParsedDirectoryResult
         })
       } else {
         const number = String(i++)
+        const title = info.tags.title
+
         result.duration += info.duration
         result.chapters.push({
           path: info.path,
           duration: info.duration,
-          title: info.tags.title,
+          title,
           hasImage: info.hasImage,
           tags: {
             number,
             number2: number.padStart(2, '0'),
             number3: number.padStart(3, '0'),
+            chapterNumber: `Глава ${number}`,
+            numberTitle: `${number} - ${title}`,
             ...info.tags,
             filename: basename(info.path, extname(info.path)),
           },
