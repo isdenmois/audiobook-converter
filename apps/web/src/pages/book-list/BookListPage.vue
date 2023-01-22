@@ -73,7 +73,7 @@ const dragOptions = {
             </div>
 
             <div class="flex">
-              <img class="handle p-2" @click.stop :src="dragIcon" />
+              <img v-if="books.length > 1" class="handle p-2" @click.stop :src="dragIcon" />
 
               <img class="remove p-2" @click.stop="dialog.open('removeBook', { book })" :src="timesIcon" />
             </div>
