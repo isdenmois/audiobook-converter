@@ -2,7 +2,7 @@
 import { inject, ref } from 'vue'
 import { useStore } from '@nanostores/vue'
 import { $books, editBook } from 'entities/audiobook'
-import { Card } from 'shared/ui'
+import { Card, Cover } from 'shared/ui'
 import { formatDuration } from 'shared/lib'
 import { api } from 'shared/api'
 import { timesIcon } from 'shared/assets'
@@ -33,8 +33,7 @@ const addBooks = async () => {
     <Card class="flex-1 overflow-hidden flex flex-col">
       <ul class="p-0 overflow-y-auto">
         <li v-for="book of books" :key="book.id" class="flex flex-row items-center mb-2 gap-2" @click="editBook(book)">
-          <img v-if="book.image" :src="`atom://${book.image}`" :alt="book.title" class="cover" />
-          <span v-else class="cover cover_empty" />
+          <Cover :size="100" :image="book.image" :title="book.title"/>
 
           <div class="flex-1">
             {{ book.title }}, {{ formatDuration(book.duration / book.speed) }} ({{ book.speed }}x)
@@ -63,18 +62,6 @@ const addBooks = async () => {
 </template>
 
 <style scoped>
-.cover {
-  width: 100px;
-  height: 100px;
-  border-radius: 16px;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-  object-fit: cover;
-}
-
-.cover_empty {
-  background-color: gray;
-}
-
 li {
   cursor: pointer;
   border-radius: 16px;

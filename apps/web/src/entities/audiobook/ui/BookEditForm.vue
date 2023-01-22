@@ -1,11 +1,8 @@
-<script lang="ts">
+<script setup lang="ts">
 import { unref, ref, toRaw, computed, onMounted, inject } from 'vue'
 import { api } from 'shared/api'
 import { interpolate } from 'shared/lib'
-</script>
-
-<script setup lang="ts">
-import { Card, Dropdown, DropdownItem, Player } from 'shared/ui'
+import { Card, Cover, Dropdown, DropdownItem, Player } from 'shared/ui'
 import { currentIcon, currentAndBelowIcon } from 'shared/assets'
 import { formatDuration } from 'shared/lib'
 
@@ -73,6 +70,12 @@ const openChapterEditor = (index: number, chapter: any) => {
   dialog.open('chapterEditor', { tags: chapter.tags, apply: (text: string) => applyChapterTags(index, text) })
 }
 
+const openCoverSearch = () => {
+  dialog.open('coverSearch', { query: title.value, apply: (url) => image.value = url })
+}
+
+const coverUrl = computed(() => image.value?.startsWith('http') ? image.value : `atom://${image.value}`)
+
 onMounted(() => {
   scrollRef.value!.scrollTop = 1
 })
@@ -80,9 +83,13 @@ onMounted(() => {
 
 <template>
   <Card class="flex flex-row">
-    <div @click="selectCover">
-      <img v-if="image" :src="`atom://${image}`" :alt="title" class="cover" />
-      <div v-else class="cover cover_empty" />
+    <div class="cover-wrapper">
+      <Cover :size="184" :image="image" :title="title" />
+
+      <div class="cover-buttons">
+        <button class="secondary" @click="selectCover">Open image</button>
+        <button class="secondary" @click="openCoverSearch">Search image</button>
+      </div>
     </div>
 
     <div class="flex-1 ml-3">
@@ -159,17 +166,24 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.cover {
-  cursor: pointer;
-  width: 184px;
-  height: 184px;
-  border-radius: 16px;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-  object-fit: cover;
+.cover-wrapper {
+  position: relative;
 }
 
-.cover_empty {
-  background-color: gray;
+.cover-wrapper .cover-buttons {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  opacity: 0;
+  transition: opacity 300ms;
+}
+
+.cover-wrapper:hover .cover-buttons {
+  opacity: 1;
 }
 
 .player {

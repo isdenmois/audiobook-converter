@@ -47,6 +47,7 @@ importers:
       '@types/howler': ^2.2.7
       '@unocss/reset': 0.44.5
       '@vitejs/plugin-vue': 3.0.1
+      cover-search: workspace:*
       electron: 19.0.9
       howler: 2.2.3
       nanostores: 0.5.12
@@ -59,6 +60,7 @@ importers:
       vue-tsc: 0.39.0
     dependencies:
       '@nanostores/vue': 0.5.5_ympl27tda4o7w6en7idglmssei
+      cover-search: link:../../packages/cover-search
       howler: 2.2.3
       nanostores: 0.5.12
       vue: 3.2.37
@@ -74,11 +76,22 @@ importers:
       vite-plugin-resolve: 2.1.2
       vue-tsc: 0.39.0_typescript@4.7.4
 
+  packages/cover-search:
+    specifiers:
+      wretch: ^2.4.1
+      zod: 3.20.2
+    dependencies:
+      wretch: 2.4.1
+      zod: 3.20.2
+
   packages/promise-pool:
     specifiers: {}
 
   packages/types:
-    specifiers: {}
+    specifiers:
+      zod: ^3.20.2
+    dependencies:
+      zod: 3.20.2
 
 packages:
 
@@ -702,10 +715,10 @@ packages:
     resolution: {integrity: sha512-aZpKjBBLzyxtr4Cmbyi3dl8uRO8SI2PG2MYEKYRZL6pl7IsKP2hJkCYzlD6NjLJlRIAZcFPFjFbJliO74DFf7w==}
     engines: {node: '>=14.0.0'}
     dependencies:
+      7zip-bin: 5.1.1
       '@develar/schema-utils': 2.6.5
       '@electron/universal': 1.2.1
       '@malept/flatpak-bundler': 0.4.0
-      7zip-bin: 5.1.1
       async-exit-hook: 2.0.1
       bluebird-lst: 1.0.9
       builder-util: 23.0.9
@@ -893,9 +906,9 @@ packages:
   /builder-util/23.0.9:
     resolution: {integrity: sha512-ccPFwI1Sex4yLt8R3LI+H07p2jHICKwEWtxkFkb6jiU/g/VJnF1wazW7I1oMcCFcPTEl30GhqoRv9rfDD9VAiQ==}
     dependencies:
+      7zip-bin: 5.1.1
       '@types/debug': 4.1.7
       '@types/fs-extra': 9.0.13
-      7zip-bin: 5.1.1
       app-builder-bin: 4.0.0
       bluebird-lst: 1.0.9
       builder-util-runtime: 9.0.2
@@ -3343,6 +3356,11 @@ packages:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
     dev: true
 
+  /wretch/2.4.1:
+    resolution: {integrity: sha512-jHJFJ968p/JNVrTZ+gJ1vZekk+3EkDsYHwamHLR+xMKur9vBv8lhBe2+XENbXQtygdO0JGtjRJeKc9xiuwW6lQ==}
+    engines: {node: '>=14'}
+    dev: false
+
   /write-file-atomic/3.0.3:
     resolution: {integrity: sha512-AvHcyZ5JnSfq3ioSyjrBkH9yW4m7Ayk8/9My/DD9onKeu/94fwrMocemO2QAJFAlnnDN+ZDS+ZjAR5ua1/PV/Q==}
     dependencies:
@@ -3412,3 +3430,7 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  /zod/3.20.2:
+    resolution: {integrity: sha512-1MzNQdAvO+54H+EaK5YpyEy0T+Ejo/7YLHS93G3RnYWh5gaotGHwGeN/ZO687qEDU2y4CdStQYXVHIgrUl5UVQ==}
+    dev: false

@@ -13,7 +13,7 @@ import { nextParsedMedia, parsed$ } from 'entities/media-parser'
 import { addBook, BookRemoveDialog } from 'entities/audiobook'
 import { events } from 'shared/lib'
 import { ErrorDialog } from 'shared/ui'
-import { ChapterEditorDialog } from 'pages/modals'
+import { ChapterEditorDialog, CoverSearchDialog } from 'pages/modals'
 import { currentRoute$ } from './current-route'
 
 const route = useStore(currentRoute$)
@@ -35,6 +35,7 @@ const DIALOG_TYPES: Record<string, any> = {
   error: ErrorDialog,
   removeBook: BookRemoveDialog,
   chapterEditor: ChapterEditorDialog,
+  coverSearch: CoverSearchDialog
 }
 const open = (type: string, params: any) => {
   dialogs.value.push({ id: id++, type, params })

@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@nanostores/vue": "0.5.5",
+    "cover-search": "workspace:*",
     "howler": "2.2.3",
     "nanostores": "0.5.12",
     "vue": "3.2.37"
