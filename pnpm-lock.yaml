@@ -58,7 +58,7 @@ importers:
       vite-plugin-resolve: 2.1.2
       vue: 3.2.37
       vue-tsc: 0.39.0
-      vuedraggable: ^4.1.0
+      vuedraggable: 4.1.0
     dependencies:
       '@nanostores/vue': 0.5.5_ympl27tda4o7w6en7idglmssei
       cover-search: link:../../packages/cover-search
@@ -80,7 +80,7 @@ importers:
 
   packages/cover-search:
     specifiers:
-      wretch: ^2.4.1
+      wretch: 2.4.1
       zod: 3.20.2
     dependencies:
       wretch: 2.4.1
@@ -91,7 +91,7 @@ importers:
 
   packages/types:
     specifiers:
-      zod: ^3.20.2
+      zod: 3.20.2
     dependencies:
       zod: 3.20.2
 
