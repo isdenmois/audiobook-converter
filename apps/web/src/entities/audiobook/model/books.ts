@@ -21,6 +21,6 @@ export const updateBook = (data: any) => {
   $books.set($books.get().map(book => (book.id === bookId ? { ...book, ...data } : book)))
 }
 
-export const resetBooks = () => {
-  $books.set([])
+export const resetBooks = (books = []) => {
+  $books.set(books)
 }

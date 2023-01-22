@@ -1,5 +1,6 @@
 export { default as currentIcon } from './current.svg'
 export { default as currentAndBelowIcon } from './current-and-below.svg'
+export { default as dragIcon } from './drag.svg'
 export { default as ellipsisIcon } from './ellipsis.svg'
 export { default as emptyBackground } from './empty.png'
 export { default as pauseIcon } from './pause.svg'

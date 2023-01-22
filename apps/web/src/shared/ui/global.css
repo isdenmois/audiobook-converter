@@ -1,6 +1,7 @@
 :root {
   --background: #f0f2f4;
   --card-background: #fff;
+  --card-ghost-background: #e2e5e9;
   --primary: #1a8cff;
   --button-secondary-background: #e2e5e9;
   --dangerous: #ff1a1a;
