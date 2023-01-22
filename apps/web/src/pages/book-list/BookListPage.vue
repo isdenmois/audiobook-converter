@@ -64,7 +64,12 @@ const dragOptions = {
             <Cover :size="100" :image="book.image" :title="book.title"/>
 
             <div class="flex-1">
-              {{ book.title }}, {{ formatDuration(book.duration / book.speed) }} ({{ book.speed }}x)
+              <div>
+                {{ book.title }}, {{ formatDuration(book.duration / book.speed) }} ({{ book.speed }}x)
+              </div>
+              <div class="author">
+                {{book.author}}
+              </div>
             </div>
 
             <div class="flex">
@@ -99,6 +104,12 @@ li {
   background-color: var(--card-background);
   list-style-type: none;
   margin: 2px 2px 16px;
+}
+
+.author {
+  color: var(--secondary-text);
+  font-size: 14px;
+  margin-top: 8px;
 }
 
 .remove {

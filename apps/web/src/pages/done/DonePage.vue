@@ -33,7 +33,12 @@ const startAgain = async () => {
           <Cover :size="100" :title="book.title" :image="book.image" />
 
           <div class="flex-1">
-            {{ book.title }}, {{ formatDuration(book.duration / book.speed) }} ({{ book.speed }}x)
+            <div>
+              {{ book.title }}, {{ formatDuration(book.duration / book.speed) }} ({{ book.speed }}x)
+            </div>
+            <div class="author">
+              {{book.author}}
+            </div>
           </div>
         </li>
       </ul>
@@ -57,5 +62,11 @@ li {
   border-radius: 16px;
   background-color: var(--card-background);
   list-style-type: none;
+}
+
+.author {
+  color: var(--secondary-text);
+  font-size: 14px;
+  margin-top: 8px;
 }
 </style>
