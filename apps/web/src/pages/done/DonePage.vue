@@ -2,13 +2,14 @@
 import { useStore } from '@nanostores/vue'
 import { $books, resetBooks } from 'entities/audiobook'
 import { addToParse } from 'entities/media-parser'
+import { settings$ } from 'entities/settings'
 import { api } from 'shared/api'
 import { Card, Cover } from 'shared/ui'
 import { currentDestination$, resetDone } from 'features/encode'
 </script>
 
 <script setup lang="ts">
-import { PathOpener, PathSelector } from 'features/encode'
+import { PathOpener, EncodePathSelector } from 'features/encode'
 import { formatDuration } from 'shared/lib'
 
 const books = useStore($books)
@@ -16,7 +17,8 @@ const pathToOpen = useStore(currentDestination$)
 
 const startAgain = async () => {
   try {
-    const paths = await api.dialog.openToParse()
+    const { sourceBooksPath } = settings$.get()
+    const paths = await api.dialog.openToParse(sourceBooksPath)
 
     addToParse(paths)
     resetBooks()
@@ -33,11 +35,9 @@ const startAgain = async () => {
           <Cover :size="100" :title="book.title" :image="book.image" />
 
           <div class="flex-1">
-            <div>
-              {{ book.title }}, {{ formatDuration(book.duration / book.speed) }} ({{ book.speed }}x)
-            </div>
+            <div>{{ book.title }}, {{ formatDuration(book.duration / book.speed) }} ({{ book.speed }}x)</div>
             <div class="author">
-              {{book.author}}
+              {{ book.author }}
             </div>
           </div>
         </li>
@@ -46,7 +46,7 @@ const startAgain = async () => {
 
     <Card class="mt-4">
       <div class="flex flex-row gap-3">
-        <PathSelector :path="pathToOpen" :disabled="true" />
+        <EncodePathSelector :path="pathToOpen" :disabled="true" />
         <PathOpener :path="pathToOpen" />
 
         <div class="flex-1" />

@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { computed, inject, ref } from 'vue'
 import { useStore } from '@nanostores/vue'
-import Draggable from "vuedraggable";
+import Draggable from 'vuedraggable'
 import { $books, editBook, resetBooks } from 'entities/audiobook'
 import { Card, Cover } from 'shared/ui'
 import { formatDuration } from 'shared/lib'
 import { api } from 'shared/api'
 import { dragIcon, timesIcon } from 'shared/assets'
 import { addToParse } from 'entities/media-parser'
-import { PathOpener, PathSelector, startEncode, savePath$ } from 'features/encode'
+import { settings$ } from 'entities/settings'
+import { PathOpener, EncodePathSelector, startEncode, savePath$ } from 'features/encode'
 
 const dialog: any = inject('dialog')
 
@@ -23,8 +24,8 @@ const bookList = computed({
   },
   get() {
     return books.value
-  }
-});
+  },
+})
 
 setTimeout(() => {
   encodeDisabled.value = false
@@ -32,7 +33,8 @@ setTimeout(() => {
 
 const addBooks = async () => {
   try {
-    const paths = await api.dialog.openToParse()
+    const { sourceBooksPath } = settings$.get()
+    const paths = await api.dialog.openToParse(sourceBooksPath)
 
     addToParse(paths)
   } catch {}
@@ -40,14 +42,13 @@ const addBooks = async () => {
 
 const dragOptions = {
   animation: 200,
-  ghostClass: "ghost"
+  ghostClass: 'ghost',
 }
 </script>
 
 <template>
   <div class="flex flex-1 flex-col overflow-hidden">
     <Card class="flex-1 overflow-hidden flex flex-col">
-
       <Draggable
         tag="ul"
         v-model="bookList"
@@ -61,14 +62,12 @@ const dragOptions = {
       >
         <template #item="{ element: book }">
           <li class="flex flex-row items-center mb-2 gap-2" @click="editBook(book)">
-            <Cover :size="100" :image="book.image" :title="book.title"/>
+            <Cover :size="100" :image="book.image" :title="book.title" />
 
             <div class="flex-1">
-              <div>
-                {{ book.title }}, {{ formatDuration(book.duration / book.speed) }} ({{ book.speed }}x)
-              </div>
+              <div>{{ book.title }}, {{ formatDuration(book.duration / book.speed) }} ({{ book.speed }}x)</div>
               <div class="author">
-                {{book.author}}
+                {{ book.author }}
               </div>
             </div>
 
@@ -84,7 +83,7 @@ const dragOptions = {
 
     <Card class="mt-4">
       <div class="flex flex-row gap-3">
-        <PathSelector :path="savePath" />
+        <EncodePathSelector :path="savePath" />
 
         <PathOpener :path="savePath" />
 

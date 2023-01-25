@@ -6,7 +6,7 @@ import { Card, Cover, Dropdown, DropdownItem, Player } from 'shared/ui'
 import { currentIcon, currentAndBelowIcon } from 'shared/assets'
 import { formatDuration } from 'shared/lib'
 
-const props = defineProps(['book', 'saveLabel', 'cancelLabel', 'progress'])
+const props = defineProps(['book', 'saveLabel', 'cancelLabel', 'progress', 'defaultSpeed', 'coversPath'])
 const emit = defineEmits(['save', 'cancel'])
 const scrollRef = ref<HTMLElement | null>(null)
 const book = props.book
@@ -14,7 +14,7 @@ const book = props.book
 let image = ref(book.image)
 let title = ref(book.title)
 let author = ref(book.author)
-let speed = ref(book.speed || 1.6)
+let speed = ref(book.speed || props.defaultSpeed)
 let chapters = ref(book.chapters.map((chapter: any) => ({ ...chapter })))
 
 const tags = Object.values(book.chapters[0].tags)
@@ -58,7 +58,7 @@ const save = () => {
 
 const selectCover = async () => {
   try {
-    const [imagePath] = await api.dialog.openCover()
+    const [imagePath] = await api.dialog.openCover(props.coversPath)
 
     image.value = imagePath
   } catch {}
@@ -71,10 +71,8 @@ const openChapterEditor = (index: number, chapter: any) => {
 }
 
 const openCoverSearch = () => {
-  dialog.open('coverSearch', { query: title.value, apply: (url) => image.value = url })
+  dialog.open('coverSearch', { query: title.value, apply: url => (image.value = url) })
 }
-
-const coverUrl = computed(() => image.value?.startsWith('http') ? image.value : `atom://${image.value}`)
 
 onMounted(() => {
   scrollRef.value!.scrollTop = 1

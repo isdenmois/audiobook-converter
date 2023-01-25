@@ -9,6 +9,7 @@ import { BookListPage } from 'pages/book-list'
 import { BookEditPage } from 'pages/book-edit'
 import { EncodePage } from 'pages/encode'
 import { DonePage } from 'pages/done'
+import { SettingsPage } from 'pages/settings'
 import { nextParsedMedia, parsed$ } from 'entities/media-parser'
 import { addBook, BookRemoveDialog } from 'entities/audiobook'
 import { events } from 'shared/lib'
@@ -35,7 +36,7 @@ const DIALOG_TYPES: Record<string, any> = {
   error: ErrorDialog,
   removeBook: BookRemoveDialog,
   chapterEditor: ChapterEditorDialog,
-  coverSearch: CoverSearchDialog
+  coverSearch: CoverSearchDialog,
 }
 const open = (type: string, params: any) => {
   dialogs.value.push({ id: id++, type, params })
@@ -73,6 +74,8 @@ provide('dialog', { open })
   <EncodePage v-if="route === 'ENCODING'" />
 
   <DonePage v-if="route === 'DONE'" />
+
+  <SettingsPage v-if="route === 'SETTINGS'" />
 
   <div v-for="dialog of dialogs" :key="dialog.id" class="app-dialog">
     <div class="backdrop" @click="close(dialog)"></div>

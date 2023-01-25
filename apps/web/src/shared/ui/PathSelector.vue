@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { defineProps } from 'vue'
 import { api } from 'shared/api'
 import { ellipsisIcon } from 'shared/assets'
-import { updateSavePath } from '../model'
 
-defineProps<{ path: string; disabled?: boolean }>()
+const props = defineProps<{ path: string; disabled?: boolean }>()
+
+const emit = defineEmits(['select'])
 
 const selectPath = async () => {
   try {
-    const path = await api.dialog.selectDirectory()
+    const path = await api.dialog.selectDirectory(props.path || '')
 
-    updateSavePath(path)
+    emit('select', path)
   } catch {}
 }
 </script>
@@ -19,7 +19,12 @@ const selectPath = async () => {
   <div class="container editable text-xs flex flex-row b-rd-1">
     <div class="path text px-2 py-1.5 flex-1">{{ path }}</div>
 
-    <button v-if="!disabled" class="secondary selector flex justify-center items-center" @click="selectPath">
+    <button
+      v-if="!disabled"
+      class="secondary selector flex justify-center items-center"
+      type="button"
+      @click="selectPath"
+    >
       <img :src="ellipsisIcon" />
     </button>
   </div>

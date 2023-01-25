@@ -1,6 +1,8 @@
 import { join } from 'path'
 import { access, mkdir } from 'fs/promises'
 import { app, BrowserWindow, dialog, protocol, shell, ipcMain } from 'electron'
+import { Settings, settingsSchema } from 'types'
+import storage from 'electron-json-storage'
 import { parseDirectory } from './ffprobe-parser'
 import { convert } from './ffmpeg-converter'
 import { restoreOrCreateWindow } from './mainWindow'
@@ -175,3 +177,31 @@ ipcMain.handle('encoder/encode', async ({ sender }, book: any, path: string) => 
 //     console.log(err)
 //   }
 // })
+
+const SETTINGS_KEY = 'settings'
+const DEFAULT_SETTINGS: Settings = {
+  coversPath: '',
+  outputPath: '',
+  sourceBooksPath: '',
+  defaultSpeed: 1.6,
+}
+
+ipcMain.handle('settings/get', (): Settings => {
+  const settings = storage.getSync(SETTINGS_KEY) as Settings
+
+  if (!settingsSchema.safeParse(settings).success) {
+    return DEFAULT_SETTINGS
+  }
+
+  return settings
+})
+
+ipcMain.handle('settings/set', (_, settings: Settings): boolean => {
+  if (!settingsSchema.safeParse(settings).success) {
+    return false
+  }
+
+  storage.set(SETTINGS_KEY, settings, () => {})
+
+  return true
+})
