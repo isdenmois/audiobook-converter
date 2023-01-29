@@ -171,10 +171,13 @@ onMounted(() => {
 }
 
 .cover-wrapper .cover-buttons {
+  background-color: #0004;
+  border-radius: 16px;
   position: absolute;
   inset: 0;
   display: flex;
   flex-direction: column;
+  margin-bottom: 4px;
   align-items: center;
   justify-content: center;
   gap: 16px;
