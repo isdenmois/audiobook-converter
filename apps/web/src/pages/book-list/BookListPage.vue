@@ -3,10 +3,10 @@ import { computed, inject, ref } from 'vue'
 import { useStore } from '@nanostores/vue'
 import Draggable from 'vuedraggable'
 import { $books, editBook, resetBooks } from 'entities/audiobook'
-import { Card, Cover } from 'shared/ui'
-import { formatDuration } from 'shared/lib'
+import { Card } from 'shared/ui'
 import { api } from 'shared/api'
 import { dragIcon, timesIcon } from 'shared/assets'
+import { BookItem } from 'entities/audiobook'
 import { addToParse } from 'entities/media-parser'
 import { settings$ } from 'entities/settings'
 import { PathOpener, EncodePathSelector, startEncode, savePath$ } from 'features/encode'
@@ -61,22 +61,13 @@ const dragOptions = {
         @end="isDragging = false"
       >
         <template #item="{ element: book }">
-          <li class="flex flex-row items-center mb-2 gap-2" @click="editBook(book)">
-            <Cover :size="100" :image="book.image" :title="book.title" />
-
-            <div class="flex-1">
-              <div>{{ book.title }}, {{ formatDuration(book.duration / book.speed) }} ({{ book.speed }}x)</div>
-              <div class="author">
-                {{ book.author }}
-              </div>
-            </div>
-
+          <BookItem :book="book" clickable @click="editBook(book)">
             <div class="flex">
               <img v-if="books.length > 1" class="handle p-2" @click.stop :src="dragIcon" />
 
               <img class="remove p-2" @click.stop="dialog.open('removeBook', { book })" :src="timesIcon" />
             </div>
-          </li>
+          </BookItem>
         </template>
       </Draggable>
     </Card>
@@ -97,20 +88,6 @@ const dragOptions = {
 </template>
 
 <style scoped>
-li {
-  cursor: pointer;
-  border-radius: 16px;
-  background-color: var(--card-background);
-  list-style-type: none;
-  margin: 2px 2px 16px;
-}
-
-.author {
-  color: var(--secondary-text);
-  font-size: 14px;
-  margin-top: 8px;
-}
-
 .remove {
   opacity: 0;
 }
@@ -128,6 +105,7 @@ ul:not(.dragging) li:hover :is(.remove, .handle) {
   opacity: 1;
 }
 </style>
+
 <style>
 li.ghost {
   opacity: 0.5;
