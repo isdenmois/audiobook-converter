@@ -1,6 +1,6 @@
 <script lang="ts">
 import { ref } from 'vue'
-import { PathSelector } from 'shared/ui'
+import { PathSelector, Slider } from 'shared/ui'
 import { settings$ } from '../model'
 </script>
 
@@ -40,16 +40,7 @@ const speed = ref(settings$.get().defaultSpeed)
   </p>
 
   <p class="flex flex-row gap-3">
-    <input
-      class="flex-1"
-      name="speed"
-      type="range"
-      min="0.1"
-      max="2.0"
-      step="0.1"
-      :value="speed"
-      @input="speed = $event.target.valueAsNumber"
-    />
+    <Slider v-model="speed" name="speed" />
     <span>{{ speed }}x</span>
   </p>
 </template>

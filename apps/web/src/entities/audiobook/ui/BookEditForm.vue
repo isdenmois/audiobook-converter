@@ -2,7 +2,7 @@
 import { unref, ref, toRaw, computed, onMounted, inject } from 'vue'
 import { api } from 'shared/api'
 import { interpolate } from 'shared/lib'
-import { Card, Cover, Dropdown, DropdownItem, Player } from 'shared/ui'
+import { Card, Cover, Dropdown, DropdownItem, Player, Slider } from 'shared/ui'
 import { currentIcon, currentAndBelowIcon } from 'shared/assets'
 import { formatDuration } from 'shared/lib'
 
@@ -108,15 +108,7 @@ onMounted(() => {
       </p>
 
       <p class="flex flex-row gap-3">
-        <input
-          class="flex-1"
-          type="range"
-          min="0.1"
-          max="2.0"
-          step="0.1"
-          :value="speed"
-          @input="speed = +$event.target.value"
-        />
+        <Slider v-model="speed" />
         <span>{{ speed }}x, {{ duration }} </span>
       </p>
     </div>
