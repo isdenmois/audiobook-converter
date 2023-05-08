@@ -1,5 +1,0 @@
-{
-  "name": "promise-pool",
-  "license": "MIT",
-  "main": "./index.ts"
-}
